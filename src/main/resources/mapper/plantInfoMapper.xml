@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.tukorea.plantcare.repository.PlantInfoMapper">
+
+	<select id="findByCntntsNo" parameterType="String" resultType="PlantInfoDTO">
+		SELECT * FROM plant_info WHERE cntnts_no = #{cntntsNo}
+	</select>
+
+	<insert id="insert" parameterType="PlantInfoDTO">
+		INSERT INTO plant_info (
+			cntnts_no, plant_name, plant_sci_name, plant_eng_name,
+			distb_nm, image_url, water_spring, water_summer,
+			water_autumn, water_winter, manage_level, growth_info, is_manual
+		) VALUES (
+			#{cntntsNo}, #{plantName}, #{plantSciName}, #{plantEngName},
+			#{distbNm}, #{imageUrl}, #{waterSpring}, #{waterSummer},
+			#{waterAutumn}, #{waterWinter}, #{manageLevel}, #{growthInfo}, #{isManual}
+		)
+	</insert>
+
+</mapper>

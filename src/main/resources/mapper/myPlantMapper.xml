@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.tukorea.plantcare.repository.MyPlantMapper">
+
+	<select id="findAllByUserId" parameterType="String" resultType="MyPlantDTO">
+		SELECT * FROM my_plant
+		WHERE user_id = #{userId} AND del_yn = 'N'
+		ORDER BY reg_date DESC
+	</select>
+
+	<select id="findByPlantNo" parameterType="int" resultType="MyPlantDTO">
+		SELECT * FROM my_plant WHERE plant_no = #{plantNo} AND del_yn = 'N'
+	</select>
+
+	<insert id="insert" parameterType="MyPlantDTO" useGeneratedKeys="true" keyProperty="plantNo">
+		INSERT INTO my_plant (
+			user_id, cntnts_no, nickname, photo_path,
+			user_water_interval, last_water_date
+		) VALUES (
+			#{userId}, #{cntntsNo}, #{nickname}, #{photoPath},
+			#{userWaterInterval}, #{lastWaterDate}
+		)
+	</insert>
+
+	<update id="update" parameterType="MyPlantDTO">
+		UPDATE my_plant
+		SET nickname = #{nickname},
+			photo_path = #{photoPath},
+			user_water_interval = #{userWaterInterval},
+			last_water_date = #{lastWaterDate}
+		WHERE plant_no = #{plantNo} AND del_yn = 'N'
+	</update>
+
+	<update id="delete" parameterType="int">
+		UPDATE my_plant SET del_yn = 'Y' WHERE plant_no = #{plantNo}
+	</update>
+
+</mapper>

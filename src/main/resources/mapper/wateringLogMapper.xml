@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.tukorea.plantcare.repository.WateringLogMapper">
+
+	<select id="findByPlantNo" parameterType="int" resultType="WateringLogDTO">
+		SELECT * FROM watering_log
+		WHERE plant_no = #{plantNo}
+		ORDER BY water_date DESC
+	</select>
+
+	<insert id="insert" parameterType="WateringLogDTO" useGeneratedKeys="true" keyProperty="logNo">
+		INSERT INTO watering_log (plant_no, water_date)
+		VALUES (#{plantNo}, #{waterDate})
+	</insert>
+
+	<select id="findByMonth" resultType="WateringLogDTO">
+		SELECT w.* FROM watering_log w
+		JOIN my_plant p ON w.plant_no = p.plant_no
+		WHERE YEAR(w.water_date) = #{year}
+		  AND MONTH(w.water_date) = #{month}
+		  AND p.user_id = #{userId}
+		  AND p.del_yn = 'N'
+		ORDER BY w.water_date
+	</select>
+
+</mapper>
