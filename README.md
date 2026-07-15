@@ -7,8 +7,8 @@
 ### 1. 클론
 
 ```bash
-git clone <레포지토리_URL>
-cd plantcare
+git clone https://github.com/Doehyun77/Plantcare.git
+cd Plantcare
 ```
 
 ### 2. MySQL DB 생성
@@ -21,24 +21,7 @@ mysql -u root -p < sql/init.sql
 
 → `plantcare` 데이터베이스, `plantcare` 사용자, 3개 테이블이 생성됨
 
-### 3. 개인 설정 파일 작성
-
-```bash
-# application-secret.properties.example을 복사해서 작성
-cp src/main/resources/application-secret.properties src/main/resources/application-secret.properties
-# (Windows) copy src\main\resources\application-secret.properties src\main\resources\application-secret.properties
-```
-
-파일 내용을 본인 환경에 맞게 수정:
-
-```properties
-# 농촌진흥청 API 키 (발급: https://api.nongsaro.go.kr)
-api.nongsaro.key=발급받은_API_키
-```
-
-> ⚠️ `application-secret.properties`는 .gitignore에 등록되어 있어 git에 올라가지 않습니다.
-
-### 4. 실행
+### 3. 실행
 
 ```bash
 mvnw spring-boot:run
@@ -46,10 +29,10 @@ mvnw spring-boot:run
 
 브라우저에서 `http://localhost:7777` 접속
 
-### 5. Eclipse에서 실행 (팀원용)
+### 4. Eclipse에서 실행
 
 1. `File → Import → Existing Maven Projects`
-2. Root Directory: 클론한 `plantcare` 폴더 선택
+2. Root Directory: 클론한 `Plantcare` 폴더 선택
 3. Finish
 4. `PlantCareApplication.java` 우클릭 → `Run As → Spring Boot App`
 
