@@ -46,39 +46,39 @@ mvnw spring-boot:run
 
 ## 협업 워크플로우
 
-### 코드 수정하고 올리기
+### 브랜치 구성
+
+| 브랜치 | 설명 |
+|--------|------|
+| `main` | 최종 통합 브랜치 (직접 push 불가, PR 필수) |
+| `Choi` | 최도현 작업 브랜치 |
+| `Kwon` | 권** 작업 브랜치 |
+| `Jin` | 진** 작업 브랜치 |
+
+### 개발 → Push 순서
 
 ```bash
-# 1. 최신 코드 받기
-git pull origin main
+# 1. 내 브랜치로 전환
+git checkout Choi     # (Kwon, Jin 중 본인 거)
 
-# 2. 새 브랜치 만들기 (예: fix/water-bug, feature/login)
-git checkout -b feature/내기능
+# 2. main 최신 코드를 내 브랜치에 반영
+git pull origin main
 
 # 3. 수정하고 커밋
 git add .
-git commit -m "feat: 설명"
+git commit -m "무슨 작업인지 간략히"
 
-# 4. 깃허브에 브랜치 푸시
-git push origin feature/내기능
+# 4. 내 브랜치에 푸시
+git push origin Choi
 ```
 
-### Pull Request 만들기
+### PR로 main에 반영하기
 
-1. 푸시하면 GitHub에 나오는 **"Compare & pull request"** 버튼 클릭
-2. 제목과 설명 작성
-3. **Create pull request** 클릭
-4. 팀원 중 1명이 승인(Approval)하면 자동으로 merge 가능
+1. GitHub 접속 → `Choi` → `main` 방향으로 **Pull Request** 생성
+2. 팀원 중 1명이 코드 확인 후 **Approve**
+3. **Merge pull request** 버튼으로 main 반영
 
-> ⚠️ **main 브랜치는 직접 push 불가능** — 반드시 PR을 통해야 합니다.
-
-### 브랜치 이름 규칙
-
-| 접두사 | 예시 |
-|--------|------|
-| `feature/` | `feature/calendar-fix`, `feature/login` |
-| `fix/` | `fix/water-bug`, `fix/api-error` |
-| `refactor/` | `refactor/css-cleanup` |
+> ⚠️ **main 브랜치는 직접 push 불가** — 반드시 PR + 팀원 1명 승인 필요
 
 ---
 
