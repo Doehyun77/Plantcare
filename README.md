@@ -12,13 +12,13 @@ git clone https://github.com/Doehyun77/Plantcare.git
 
 ### 2. MySQL DB 생성
 
-MySQL이 설치되어 있어야 합니다. 그런 다음:
+MySQL이 설치되어 있어야 합니다.
 
 **방법 A — 명령 프롬프트**
 ```bash
 mysql -u root -p < sql/init.sql
 ```
-→ 비밀번호는 **본인의 MySQL root 비밀번호** 입력 (설치할 때 직접 설정한 것)
+→ 비밀번호는 본인의 MySQL root 비밀번호 입력
 
 **방법 B — MySQL Workbench**
 1. Workbench 실행 후 root 계정으로 접속
@@ -40,7 +40,47 @@ mvnw spring-boot:run
 
 ### 4. 접속
 
-브라우저에서 `http://localhost:7777` 열면 끝!
+브라우저에서 `http://localhost:7777` 접속
+
+---
+
+## 협업 워크플로우
+
+### 코드 수정하고 올리기
+
+```bash
+# 1. 최신 코드 받기
+git pull origin main
+
+# 2. 새 브랜치 만들기 (예: fix/water-bug, feature/login)
+git checkout -b feature/내기능
+
+# 3. 수정하고 커밋
+git add .
+git commit -m "feat: 설명"
+
+# 4. 깃허브에 브랜치 푸시
+git push origin feature/내기능
+```
+
+### Pull Request 만들기
+
+1. 푸시하면 GitHub에 나오는 **"Compare & pull request"** 버튼 클릭
+2. 제목과 설명 작성
+3. **Create pull request** 클릭
+4. 팀원 중 1명이 승인(Approval)하면 자동으로 merge 가능
+
+> ⚠️ **main 브랜치는 직접 push 불가능** — 반드시 PR을 통해야 합니다.
+
+### 브랜치 이름 규칙
+
+| 접두사 | 예시 |
+|--------|------|
+| `feature/` | `feature/calendar-fix`, `feature/login` |
+| `fix/` | `fix/water-bug`, `fix/api-error` |
+| `refactor/` | `refactor/css-cleanup` |
+
+---
 
 ## 기술 스택
 
