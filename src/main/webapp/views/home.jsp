@@ -1,26 +1,138 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <%@ include file="/views/layout/header.jsp" %>
-<h2>🌿 나의 식물들</h2>
 
-<c:if test="${empty plants}">
-	<p>등록된 식물이 없습니다. <a href="/plants/register">첫 식물 등록하기</a></p>
-</c:if>
-
-<c:forEach var="plant" items="${plants}">
-	<div style="border:1px solid #ddd;padding:12px;margin:8px 0;border-radius:8px;
-		${plant.needsWater ? 'background:#fff3cd;border-color:#ffc107;' : ''}">
-		<p>
-			<strong>${plant.nickname}</strong>
-			<c:if test="${plant.needsWater}"><span style="color:#d63384;"> 💧 물 줄 시간!</span></c:if>
-		</p>
-		<p>마지막 물: ${plant.lastWaterDate != null ? plant.lastWaterDate : '기록 없음'}</p>
-		<button onclick="waterPlant(${plant.plantNo})">💧 간편체크</button>
-		<a href="/plants/detail?plantNo=${plant.plantNo}">상세</a>
-	</div>
+<c:set var="dueCount" value="0" />
+<c:forEach var="p" items="${plants}">
+	<c:if test="${p.needsWater}"><c:set var="dueCount" value="${dueCount + 1}" /></c:if>
 </c:forEach>
 
-<a href="/plants/register">+ 새 식물 등록</a>
+<c:if test="${empty plants}">
+	<div class="home-empty">
+		<p>등록된 식물이 없습니다.</p>
+		<a href="/plants/register">첫 식물 등록하기</a>
+	</div>
+</c:if>
+
+<c:if test="${not empty plants}">
+
+	<div class="home-hero">
+		<div class="home-hero-text">
+			<p class="who">해적왕 님의 정원</p>
+			<div class="stat">
+				<span class="num">${dueCount}</span>
+				<span class="label">
+					<c:choose>
+						<c:when test="${dueCount > 0}">개, 오늘 물 줄 시간이에요</c:when>
+						<c:otherwise>오늘은 모두 괜찮아요</c:otherwise>
+					</c:choose>
+				</span>
+			</div>
+			<p class="sub">
+				<c:choose>
+					<c:when test="${dueCount > 0}">딱 맞춰 오셨네요 ! 🌿</c:when>
+					<c:otherwise>내일 다시 와 주셔야해요 ! 🌿</c:otherwise>
+				</c:choose>
+			</p>
+			<a href="/plants/register" class="cta">+ 새 식물 등록하기</a>
+		</div>
+		<div class="home-hero-badge">🌿</div>
+	</div>
+
+	<div class="home-quick">
+		<a href="/calendar">
+			<span class="ico">📅</span>
+			<span class="lbl">캘린더</span>
+			<span class="desc">물주기 일정 보기</span>
+		</a>
+		<a href="#" onclick="showTab('all'); return false;">
+			<span class="ico">🌿</span>
+			<span class="lbl">내 식물 전체</span>
+			<span class="desc">등록한 식물 ${fn:length(plants)}개</span>
+		</a>
+		<a href="/plants/register">
+			<span class="ico">➕</span>
+			<span class="lbl">식물 등록</span>
+			<span class="desc">새 식물 추가하기</span>
+		</a>
+	</div>
+
+	<div class="home-tabs">
+		<button id="tab-btn-todo" class="active" onclick="showTab('todo')">할 일</button>
+		<button id="tab-btn-all" onclick="showTab('all')">내 식물</button>
+	</div>
+
+	<div class="home-avatars">
+		<c:forEach var="plant" items="${plants}">
+			<div class="home-avatar-item ${plant.needsWater ? 'due' : ''}">
+				<div class="home-avatar-circle">${fn:substring(plant.nickname, 0, 1)}</div>
+				<div class="home-avatar-label">${plant.nickname}</div>
+			</div>
+		</c:forEach>
+	</div>
+
+	<div id="tabpane-todo" class="home-tabpane active">
+		<div class="home-board">
+			<div>
+				<div class="home-section-label">💧 오늘 할 일</div>
+				<c:set var="anyDue" value="false" />
+				<c:forEach var="plant" items="${plants}">
+					<c:if test="${plant.needsWater}">
+						<c:set var="anyDue" value="true" />
+						<div class="home-row due">
+							<div class="row-avatar">${fn:substring(plant.nickname, 0, 1)}</div>
+							<div class="row-body">
+								<div class="row-name">${plant.nickname}</div>
+								<div class="row-sub">마지막 물: ${plant.lastWaterDate != null ? plant.lastWaterDate : '기록 없음'}</div>
+							</div>
+							<button class="row-check" onclick="waterPlant(${plant.plantNo})">체크</button>
+						</div>
+					</c:if>
+				</c:forEach>
+				<c:if test="${!anyDue}"><p class="row-sub" style="color:var(--sub);">오늘 물 줄 아이가 없어요.</p></c:if>
+			</div>
+
+			<div>
+				<div class="home-section-label">오늘은 괜찮아요</div>
+				<c:set var="anyOk" value="false" />
+				<c:forEach var="plant" items="${plants}">
+					<c:if test="${!plant.needsWater}">
+						<c:set var="anyOk" value="true" />
+						<div class="home-row ok">
+							<div class="row-avatar">${fn:substring(plant.nickname, 0, 1)}</div>
+							<div class="row-body">
+								<div class="row-name">${plant.nickname}</div>
+								<div class="row-sub">마지막 물: ${plant.lastWaterDate != null ? plant.lastWaterDate : '기록 없음'}</div>
+							</div>
+							<a class="row-detail" href="/plants/detail?plantNo=${plant.plantNo}">상세</a>
+						</div>
+					</c:if>
+				</c:forEach>
+				<c:if test="${!anyOk}"><p class="row-sub" style="color:var(--sub);">모든 식물이 물이 필요해요.</p></c:if>
+				<a href="/plants/register" class="home-add-tile">+ 새 식물 등록하기</a>
+			</div>
+		</div>
+	</div>
+
+	<div id="tabpane-all" class="home-tabpane home-all-list">
+		<div class="home-section-label">내 식물 전체 · ${fn:length(plants)}</div>
+		<c:forEach var="plant" items="${plants}">
+			<div class="home-row">
+				<div class="row-avatar">${fn:substring(plant.nickname, 0, 1)}</div>
+				<div class="row-body">
+					<div class="row-name">${plant.nickname}</div>
+					<div class="row-sub">마지막 물: ${plant.lastWaterDate != null ? plant.lastWaterDate : '기록 없음'}</div>
+				</div>
+				<c:if test="${plant.needsWater}">
+					<button class="row-check" onclick="waterPlant(${plant.plantNo})">체크</button>
+				</c:if>
+				<a class="row-detail" href="/plants/detail?plantNo=${plant.plantNo}">상세</a>
+			</div>
+		</c:forEach>
+	</div>
+
+</c:if>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
@@ -28,6 +140,13 @@ function waterPlant(plantNo) {
 	$.post('/water/check', { plantNo: plantNo }, function() {
 		location.reload();
 	});
+}
+
+function showTab(name) {
+	document.getElementById('tabpane-todo').classList.toggle('active', name === 'todo');
+	document.getElementById('tabpane-all').classList.toggle('active', name === 'all');
+	document.getElementById('tab-btn-todo').classList.toggle('active', name === 'todo');
+	document.getElementById('tab-btn-all').classList.toggle('active', name === 'all');
 }
 </script>
 <%@ include file="/views/layout/footer.jsp" %>
