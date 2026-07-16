@@ -32,7 +32,7 @@
 			<p class="sub">
 				<c:choose>
 					<c:when test="${dueCount > 0}">딱 맞춰 오셨네요 ! 🌿</c:when>
-					<c:otherwise>내일 다시 와 주셔야해요 ! 🌿</c:otherwise>
+					<c:otherwise>내일 다시 와 주셔야 해요 ! 🌿</c:otherwise>
 				</c:choose>
 			</p>
 			<a href="/plants/register" class="cta">+ 새 식물 등록하기</a>
