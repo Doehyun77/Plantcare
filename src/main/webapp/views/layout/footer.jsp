@@ -1,6 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 </main>
 <footer>
-	<p>&copy; 2026 식물집사</p>
+	<p>&copy; Made by Hendo Jin</p>
 </footer>
 </body>
 </html>
