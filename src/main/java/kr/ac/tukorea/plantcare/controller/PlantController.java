@@ -53,6 +53,10 @@ public class PlantController {
 	public String register(MyPlantDTO myPlant,
 			@RequestParam(value = "photo", required = false) MultipartFile photo) {
 		myPlant.setUserId("default");
+		// 빈 문자열을 null로 변환 (DB DATE 타입 호환)
+		if (myPlant.getLastWaterDate() != null && myPlant.getLastWaterDate().isEmpty()) {
+			myPlant.setLastWaterDate(null);
+		}
 
 		// 사진 업로드 처리
 		if (photo != null && !photo.isEmpty()) {
