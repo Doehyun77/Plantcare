@@ -14,6 +14,10 @@ public class PlantInfoDTO {
 	private String waterSummer;
 	private String waterAutumn;
 	private String waterWinter;
+	private String waterSpringDesc;   // 봄 물주기 설명
+	private String waterSummerDesc;   // 여름 물주기 설명
+	private String waterAutumnDesc;   // 가을 물주기 설명
+	private String waterWinterDesc;   // 겨울 물주기 설명
 	private String manageLevel;
 	private String growthInfo;
 	private String isManual;
