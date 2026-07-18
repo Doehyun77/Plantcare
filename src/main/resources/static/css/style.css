@@ -1,18 +1,19 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; background: #f8f9fa; }
-header { background: #2d6a4f; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+header { background: #2d6a4f; color: #fff; padding: clamp(0.5rem, 1.8vw, 0.75rem) clamp(1rem, 5vw, 2rem); display: flex; justify-content: space-between; align-items: center; }
+header h1 { font-size: clamp(1rem, 4vw, 1.5rem); }
 header h1 a { color: #fff; text-decoration: none; }
-header nav { display: flex; gap: .4rem; }
+header nav { display: flex; gap: clamp(.15rem, 1vw, .4rem); }
 header nav a {
-	display: flex; align-items: center; gap: .4rem;
+	display: flex; align-items: center; gap: clamp(.2rem, 1vw, .4rem);
 	color: #d8f3dc; text-decoration: none;
-	padding: .5rem .9rem; border-radius: 999px;
-	font-size: .88rem; font-weight: 600;
+	padding: clamp(.35rem, 1.5vw, .5rem) clamp(.5rem, 2.5vw, .9rem); border-radius: 999px;
+	font-size: clamp(.72rem, 2.2vw, .88rem); font-weight: 600;
 	transition: background .15s ease, color .15s ease;
 }
 header nav a:hover { background: rgba(255,255,255,.14); color: #fff; }
 header nav a.active { background: #fff; color: var(--brand); }
-header nav .nav-ico { font-size: 1rem; }
+header nav .nav-ico { font-size: clamp(.85rem, 2.5vw, 1rem); }
 main { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
 footer { text-align: center; color: #888; padding: 2rem; font-size: 0.9rem; }
 h2 { margin-bottom: 1rem; }
@@ -26,8 +27,11 @@ h2 { margin-bottom: 1rem; }
 	--ok-ink: #16824a;
 	--tile-bg: #f4f6f1;
 	--sub: #6e796f;
+	--nullco: #f0f1ed;
+	--today-bg: #eaf3ec;
 }
 
+/* ---- 메인 창 ---- */
 .home-hero { background: var(--brand); color: #eff8f2; border-radius: 24px; padding: 2rem 2.2rem; margin: 1rem 0 1.6rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; position: relative; overflow: hidden; }
 .home-hero-text { flex: 1; min-width: 0; }
 .home-hero .who { font-size: .92rem; opacity: .85; margin-bottom: .6rem; }
@@ -38,12 +42,6 @@ h2 { margin-bottom: 1rem; }
 .home-hero .cta { display: inline-block; background: #fff; color: var(--brand); font-weight: 800; font-size: .92rem; padding: .75rem 1.3rem; border-radius: 999px; text-decoration: none; }
 .home-hero-badge { flex-shrink: 0; width: 128px; height: 128px; border-radius: 50%; background: rgba(255,255,255,.14); display: flex; align-items: center; justify-content: center; font-size: 3.4rem; }
 .home-hero-badge::before { content: ""; position: absolute; width: 220px; height: 220px; right: -60px; top: -60px; border-radius: 50%; background: rgba(255,255,255,.05); }
-
-.home-quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.7rem; }
-.home-quick a { background: var(--tile-bg); border-radius: 20px; padding: 1.3rem 1.2rem; display: flex; flex-direction: column; gap: .6rem; color: #222; text-decoration: none; }
-.home-quick .ico { font-size: 1.7rem; }
-.home-quick .lbl { font-size: .92rem; font-weight: 800; }
-.home-quick .desc { font-size: .78rem; color: var(--sub); font-weight: 500; }
 
 .home-tabs { display: flex; gap: .3rem; background: var(--tile-bg); padding: .25rem; border-radius: 999px; width: max-content; margin-bottom: 1.2rem; }
 .home-tabs button { border: none; background: transparent; padding: .5rem 1.1rem; border-radius: 999px; font-size: .86rem; font-weight: 700; color: var(--sub); cursor: pointer; }
@@ -70,6 +68,7 @@ h2 { margin-bottom: 1rem; }
 .home-row.ok .row-sub { color: var(--ok-ink); }
 .home-row .row-check { border: none; border-radius: 999px; font-weight: 800; font-size: .84rem; padding: .55rem 1.05rem; cursor: pointer; background: var(--due-ink); color: #f1f8ff; }
 .home-row .row-detail { font-size: .84rem; font-weight: 700; color: var(--sub); text-decoration: none; }
+.home-row .row-delete { border: none; background: none; font-size: .84rem; font-weight: 700; color: #d64545; cursor: pointer; margin-left: .7rem; padding: 0; }
 
 .home-add-tile { display: flex; align-items: center; justify-content: center; gap: .4rem; background: var(--tile-bg); border-radius: 18px; padding: .85rem; font-size: .84rem; font-weight: 800; color: var(--sub); text-decoration: none; margin-top: .2rem; }
 
@@ -85,3 +84,124 @@ h2 { margin-bottom: 1rem; }
 @media (max-width: 640px) {
 	.home-board { grid-template-columns: 1fr; }
 }
+
+/* ---- 캘린더 창 ---- */
+.cal-wrap { margin-top: 1rem; }
+
+.cal-nav { display: flex; align-items: center; justify-content: center; gap: clamp(1rem, 4vw, 1.8rem); margin-bottom: 1.3rem; }
+.cal-nav-btn {
+	width: 36px; height: 36px; border-radius: 50%;
+	display: flex; align-items: center; justify-content: center;
+	background: var(--tile-bg); color: var(--brand);
+	text-decoration: none; font-size: .95rem; font-weight: 700;
+	transition: background .15s ease;
+}
+.cal-nav-btn:hover { background: var(--due-bg); }
+.cal-title { font-size: clamp(1.1rem, 3.2vw, 1.4rem); font-weight: 800; min-width: 9ch; text-align: center; }
+
+.cal-table { width: 100%; border-collapse: separate; border-spacing: 6px; table-layout: fixed; }
+.cal-table thead th { padding: .5rem 0; font-size: .8rem; font-weight: 700; color: var(--sub); }
+.cal-table thead th.cal-sun { color: #d64545; }
+.cal-table thead th.cal-sat { color: var(--due-ink); }
+
+.cal-cell {
+	background: var(--tile-bg); border-radius: 14px;
+	vertical-align: top; text-align: left;
+	padding: .55rem .5rem; height: 78px; position: relative;
+}
+.cal-cell.empty { background: var(--nullco); }
+.cal-cell.today { background: var(--today-bg); box-shadow: inset 0 0 0 2px var(--brand); }
+.cal-day { font-size: .86rem; font-weight: 700; color: #222; }
+.cal-cell.today .cal-day { color: var(--brand); }
+.cal-badge {
+	display: block; margin-top: .35rem; width: max-content;
+	font-size: .72rem; font-weight: 700; color: var(--due-ink);
+	background: var(--due-bg); border-radius: 999px; padding: .15rem .5rem;
+}
+
+@media (max-width: 640px) {
+	.cal-table { border-spacing: 3px; }
+	.cal-cell { height: 56px; padding: .35rem .3rem; }
+	.cal-day { font-size: .76rem; }
+	.cal-badge { font-size: .62rem; padding: .1rem .35rem; }
+}
+
+/* ---- plant register screen ---- */
+.reg-wrap { margin-top: 1rem; display: flex; flex-direction: column; gap: 1.4rem; }
+.reg-panel { background: #fff; border-radius: 20px; padding: 1.6rem 1.7rem; box-shadow: 0 2px 8px rgba(30,50,35,.05); }
+.reg-panel h3 { font-size: 1rem; font-weight: 800; margin-bottom: 1rem; }
+
+.reg-search-input {
+	width: 100%; border: none; background: var(--tile-bg); border-radius: 999px;
+	padding: .8rem 1.2rem; font-size: .92rem; font-family: inherit; color: #222;
+	outline: none; box-shadow: 0 0 0 2px transparent; transition: box-shadow .15s ease;
+}
+.reg-search-input:focus { box-shadow: 0 0 0 2px var(--brand); }
+
+.reg-search-wrap { position: relative; }
+.search-results {
+	position: absolute; top: calc(100% + .6rem); left: 0; right: 0; z-index: 20;
+	display: flex; flex-direction: column; gap: .6rem;
+	background: #fff; border-radius: 16px; padding: .6rem;
+	box-shadow: 0 10px 30px -12px rgba(30,50,35,.25);
+	max-height: 320px; overflow-y: auto;
+}
+.search-results:empty { padding: 0; box-shadow: none; }
+.search-row {
+	display: flex; align-items: center; gap: .8rem;
+	background: var(--tile-bg); border-radius: 14px; padding: .6rem .9rem;
+	cursor: pointer; transition: background .15s ease;
+}
+.search-row:hover { background: var(--due-bg); }
+.search-row img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+.search-row-noimg { font-size: 1.3rem; }
+.search-row .name { font-weight: 700; font-size: .92rem; }
+.search-empty { font-size: .88rem; color: var(--sub); }
+.search-empty a { color: var(--brand); font-weight: 700; }
+
+.search-loading { display: flex; align-items: center; gap: .55rem; font-size: .86rem; color: var(--sub); padding: .4rem 0; }
+.spinner {
+	width: 15px; height: 15px; border-radius: 50%; flex-shrink: 0;
+	border: 2px solid var(--tile-bg); border-top-color: var(--brand);
+	animation: spin .6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.search-selected {
+	display: flex; align-items: center; gap: .5rem;
+	background: var(--ok-bg); color: var(--ok-ink); border-radius: 14px;
+	padding: .7rem .9rem; font-weight: 700; font-size: .9rem;
+}
+.search-manual { background: var(--tile-bg); color: var(--sub); }
+
+.form-field { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1.1rem; }
+.form-field label { font-size: .84rem; font-weight: 700; color: var(--sub); }
+.form-field input[type=text],
+.form-field input[type=number],
+.form-field input[type=date] {
+	border: none; background: var(--tile-bg); border-radius: 10px;
+	padding: .65rem .85rem; font-size: .9rem; font-family: inherit; color: #222; outline: none;
+	box-shadow: 0 0 0 2px transparent; transition: box-shadow .15s ease;
+}
+.form-field input[type=text]:focus,
+.form-field input[type=number]:focus,
+.form-field input[type=date]:focus { box-shadow: 0 0 0 2px var(--brand); }
+.form-field input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+.form-field input[type=number]::-webkit-outer-spin-button,
+.form-field input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.form-field input.invalid { box-shadow: 0 0 0 2px #d64545; }
+.field-error { display: none; font-size: .78rem; font-weight: 700; color: #d64545; }
+.field-error.show { display: block; }
+.form-field input[type=file] { align-self: flex-start; width: max-content; font-size: .85rem; color: var(--sub); }
+.form-field input[type=file]::file-selector-button {
+	border: none; background: var(--brand); color: #fff;
+	border-radius: 999px; padding: .5rem 1rem; font-weight: 700; font-size: .82rem;
+	margin-right: .8rem; cursor: pointer; transition: opacity .15s ease;
+}
+.form-field input[type=file]::file-selector-button:hover { opacity: .88; }
+
+.btn-primary {
+	display: inline-block; background: var(--brand); color: #fff; border: none;
+	border-radius: 999px; padding: .5rem 1rem; font-weight: 700; font-size: .82rem;
+	cursor: pointer; margin-top: .3rem;
+}
+.btn-primary:hover { opacity: .92; }

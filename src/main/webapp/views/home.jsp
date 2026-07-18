@@ -40,24 +40,6 @@
 		<div class="home-hero-badge">🌿</div>
 	</div>
 
-	<div class="home-quick">
-		<a href="/calendar">
-			<span class="ico">📅</span>
-			<span class="lbl">캘린더</span>
-			<span class="desc">물주기 일정 보기</span>
-		</a>
-		<a href="#" onclick="showTab('all'); return false;">
-			<span class="ico">🌿</span>
-			<span class="lbl">내 식물 전체</span>
-			<span class="desc">등록한 식물 ${fn:length(plants)}개</span>
-		</a>
-		<a href="/plants/register">
-			<span class="ico">➕</span>
-			<span class="lbl">식물 등록</span>
-			<span class="desc">새 식물 추가하기</span>
-		</a>
-	</div>
-
 	<div class="home-tabs">
 		<button id="tab-btn-todo" class="active" onclick="showTab('todo')">할 일</button>
 		<button id="tab-btn-all" onclick="showTab('all')">내 식물</button>
@@ -106,6 +88,7 @@
 								<div class="row-sub">마지막 물: ${plant.lastWaterDate != null ? plant.lastWaterDate : '기록 없음'}</div>
 							</div>
 							<a class="row-detail" href="/plants/detail?plantNo=${plant.plantNo}">상세</a>
+							<button type="button" class="row-delete">삭제</button>
 						</div>
 					</c:if>
 				</c:forEach>
@@ -128,6 +111,7 @@
 					<button class="row-check" onclick="waterPlant(${plant.plantNo})">체크</button>
 				</c:if>
 				<a class="row-detail" href="/plants/detail?plantNo=${plant.plantNo}">상세</a>
+				<button type="button" class="row-delete">삭제</button>
 			</div>
 		</c:forEach>
 	</div>

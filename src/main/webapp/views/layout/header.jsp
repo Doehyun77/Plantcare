@@ -6,13 +6,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>식물집사</title>
+<title>Plan-Ti</title>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <c:set var="reqUri" value="${empty requestScope['jakarta.servlet.forward.request_uri'] ? pageContext.request.requestURI : requestScope['jakarta.servlet.forward.request_uri']}" />
 <header>
-	<h1><a href="/">🌱 식물집사</a></h1>
+	<h1><a href="/">🌱 Plan-Ti</a></h1>
 	<nav>
 		<a href="/" class="${reqUri == '/' ? 'active' : ''}"><span class="nav-ico">🏠</span>홈</a>
 		<a href="/calendar" class="${fn:startsWith(reqUri, '/calendar') ? 'active' : ''}"><span class="nav-ico">📅</span>캘린더</a>
