@@ -79,6 +79,8 @@ public class PlantController {
 	public String detail(@RequestParam("plantNo") int plantNo, Model model) {
 		MyPlantDTO plant = plantService.getMyPlant(plantNo);
 		model.addAttribute("plant", plant);
+		int interval = plantService.getWateringInterval(plant);
+		model.addAttribute("actualInterval", interval);
 		return "plantDetail";
 	}
 
