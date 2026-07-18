@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class CalendarService {
 
-	// API 물주기 코드 -> 일수 변환
+	// API 물주기 코드 -> 일수 변환 (농촌진흥청 실제 코드 기준)
+	// 053002 = 흙을 촉촉하게 유지함          -> 3일 (자주)
+	// 053003 = 토양 표면이 말랐을때 충분히 관수함 -> 7일 (보통)
+	// 053004 = 화분 흙 대부분 말랐을때 충분히 관수함 -> 14일 (조금)
 	public static final Map<String, Integer> WATER_CYCLE_MAP = Map.of(
-		"001", 14,  // 조금 -> 2주에 한 번
-		"002", 7,   // 보통 -> 1주에 한 번
-		"003", 3    // 많이 -> 3일에 한 번
+		"053002", 3,
+		"053003", 7,
+		"053004", 14
 	);
 
 	// 기본 물주기 (코드 없을 경우)

@@ -124,7 +124,7 @@ public class ApiService {
 		dto.setPlantEngName(getText(item, "plntzrNm"));
 		dto.setDistbNm(getText(item, "distbNm"));
 		dto.setImageUrl(buildImageUrl(getText(item, "rtnStreFileNm")));
-		dto.setWaterSpring(getText(item, "watercycleSpringCode"));
+		dto.setWaterSpring(getText(item, "watercycleSprngCode"));
 		dto.setWaterSummer(getText(item, "watercycleSummerCode"));
 		dto.setWaterAutumn(getText(item, "watercycleAutumnCode"));
 		dto.setWaterWinter(getText(item, "watercycleWinterCode"));
