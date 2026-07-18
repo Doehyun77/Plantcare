@@ -19,6 +19,7 @@
 	<label>별명 <input type="text" name="nickname" id="nickname" required></label><br>
 	<label>사진 <input type="file" name="photo" accept="image/*"></label><br>
 	<label>물주기 간격 (일) <input type="number" name="userWaterInterval" id="userWaterInterval" placeholder="비우면 API 기본값"></label><br>
+	<label>마지막 물 준 날짜 <input type="date" name="lastWaterDate" id="lastWaterDate"></label><br>
 
 	<button type="submit">등록</button>
 </form>

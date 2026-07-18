@@ -7,7 +7,8 @@
 	<input type="hidden" name="plantNo" value="${plant.plantNo}">
 
 	<label>별명 <input type="text" name="nickname" value="${plant.nickname}" required></label><br>
-	<label>물주기 간격 (일) <input type="number" name="userWaterInterval" value="${plant.userWaterInterval}"></label><br>
+	<label>물주기 간격 (일) <input type="number" name="userWaterInterval" value="${plant.userWaterInterval}">
+	<c:if test="${empty plant.userWaterInterval}"><small>(기본 ${actualInterval}일)</small></c:if></label><br>
 
 	<button type="submit">수정</button>
 </form>

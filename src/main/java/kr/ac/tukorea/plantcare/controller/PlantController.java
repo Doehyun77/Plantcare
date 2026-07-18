@@ -16,17 +16,20 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.ac.tukorea.plantcare.dto.MyPlantDTO;
 import kr.ac.tukorea.plantcare.dto.PlantInfoDTO;
 import kr.ac.tukorea.plantcare.service.PlantService;
+import kr.ac.tukorea.plantcare.service.ApiService;
 
 @Controller
 @RequestMapping("/plants")
 public class PlantController {
 
 	private final PlantService plantService;
+	private final ApiService apiService;
 
 	private static final String UPLOAD_DIR = "src/main/resources/static/images/plants/";
 
-	public PlantController(PlantService plantService) {
+	public PlantController(PlantService plantService, ApiService apiService) {
 		this.plantService = plantService;
+		this.apiService = apiService;
 	}
 
 	/**
@@ -53,6 +56,10 @@ public class PlantController {
 	public String register(MyPlantDTO myPlant,
 			@RequestParam(value = "photo", required = false) MultipartFile photo) {
 		myPlant.setUserId("default");
+		// 빈 문자열을 null로 변환 (DB DATE 타입 호환)
+		if (myPlant.getLastWaterDate() != null && myPlant.getLastWaterDate().isEmpty()) {
+			myPlant.setLastWaterDate(null);
+		}
 
 		// 사진 업로드 처리
 		if (photo != null && !photo.isEmpty()) {
@@ -79,6 +86,8 @@ public class PlantController {
 	public String detail(@RequestParam("plantNo") int plantNo, Model model) {
 		MyPlantDTO plant = plantService.getMyPlant(plantNo);
 		model.addAttribute("plant", plant);
+		int interval = plantService.getWateringInterval(plant);
+		model.addAttribute("actualInterval", interval);
 		return "plantDetail";
 	}
 
@@ -98,5 +107,23 @@ public class PlantController {
 	public String delete(@RequestParam("plantNo") int plantNo) {
 		plantService.deletePlant(plantNo);
 		return "redirect:/";
+	}
+
+	/**
+	 * 도감: 식물 검색 페이지
+	 */
+	@GetMapping("/encyclopedia")
+	public String encyclopediaForm() {
+		return "plantEncyclopedia";
+	}
+
+	/**
+	 * 도감: 식물 상세 정보 (API에서 직접 조회)
+	 */
+	@GetMapping("/encyclopedia/detail")
+	public String encyclopediaDetail(@RequestParam("cntntsNo") String cntntsNo, Model model) {
+		PlantInfoDTO info = apiService.getPlantDetail(cntntsNo);
+		model.addAttribute("info", info);
+		return "plantEncyclopediaDetail";
 	}
 }

@@ -16,7 +16,8 @@
 	<nav>
 		<a href="/" class="${reqUri == '/' ? 'active' : ''}"><span class="nav-ico">🏠</span>홈</a>
 		<a href="/calendar" class="${fn:startsWith(reqUri, '/calendar') ? 'active' : ''}"><span class="nav-ico">📅</span>캘린더</a>
-		<a href="/plants/register" class="${fn:startsWith(reqUri, '/plants') ? 'active' : ''}"><span class="nav-ico">🌿</span>식물등록</a>
+		<a href="/plants/register" class="${fn:startsWith(reqUri, '/plants/register') ? 'active' : ''}"><span class="nav-ico">🌿</span>식물등록</a>
+		<a href="/plants/encyclopedia" class="${fn:startsWith(reqUri, '/plants/encyclopedia') ? 'active' : ''}"><span class="nav-ico">📖</span>도감</a>
 	</nav>
 </header>
 <main>

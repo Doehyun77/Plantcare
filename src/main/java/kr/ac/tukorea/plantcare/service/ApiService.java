@@ -124,12 +124,20 @@ public class ApiService {
 		dto.setPlantEngName(getText(item, "plntzrNm"));
 		dto.setDistbNm(getText(item, "distbNm"));
 		dto.setImageUrl(buildImageUrl(getText(item, "rtnStreFileNm")));
-		dto.setWaterSpring(getText(item, "watercycleSpringCode"));
+		dto.setWaterSpring(getText(item, "watercycleSprngCode"));
+		dto.setWaterSpringDesc(getText(item, "watercycleSprngCodeNm"));
 		dto.setWaterSummer(getText(item, "watercycleSummerCode"));
+		dto.setWaterSummerDesc(getText(item, "watercycleSummerCodeNm"));
 		dto.setWaterAutumn(getText(item, "watercycleAutumnCode"));
+		dto.setWaterAutumnDesc(getText(item, "watercycleAutumnCodeNm"));
 		dto.setWaterWinter(getText(item, "watercycleWinterCode"));
+		dto.setWaterWinterDesc(getText(item, "watercycleWinterCodeNm"));
 		dto.setManageLevel(getText(item, "manageLevelCode"));
 		dto.setGrowthInfo(getText(item, "growthInfo"));
+		dto.setFncltyInfo(getText(item, "fncltyInfo"));
+		dto.setOrgplceInfo(getText(item, "orgplceInfo"));
+		dto.setSpeclmanageInfo(getText(item, "speclmanageInfo"));
+		dto.setToxctyInfo(getText(item, "toxctyInfo"));
 		return dto;
 	}
 
