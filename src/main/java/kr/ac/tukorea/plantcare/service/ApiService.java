@@ -130,6 +130,10 @@ public class ApiService {
 		dto.setWaterWinter(getText(item, "watercycleWinterCode"));
 		dto.setManageLevel(getText(item, "manageLevelCode"));
 		dto.setGrowthInfo(getText(item, "growthInfo"));
+		dto.setFncltyInfo(getText(item, "fncltyInfo"));
+		dto.setOrgplceInfo(getText(item, "orgplceInfo"));
+		dto.setSpeclmanageInfo(getText(item, "speclmanageInfo"));
+		dto.setToxctyInfo(getText(item, "toxctyInfo"));
 		return dto;
 	}
 
