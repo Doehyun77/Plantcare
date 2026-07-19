@@ -87,8 +87,6 @@
 								<div class="row-name">${plant.nickname}</div>
 								<div class="row-sub">마지막 물: ${plant.lastWaterDate != null ? plant.lastWaterDate : '기록 없음'}</div>
 							</div>
-							<a class="row-detail" href="/plants/detail?plantNo=${plant.plantNo}">상세</a>
-							<button type="button" class="row-delete">삭제</button>
 						</div>
 					</c:if>
 				</c:forEach>
