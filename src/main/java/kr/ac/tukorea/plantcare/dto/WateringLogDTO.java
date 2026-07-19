@@ -8,4 +8,5 @@ public class WateringLogDTO {
 	private int plantNo;
 	private String waterDate;
 	private String regDate;
+	private String nickname; // findByMonth 조회 시에만 채워짐 (my_plant 조인)
 }

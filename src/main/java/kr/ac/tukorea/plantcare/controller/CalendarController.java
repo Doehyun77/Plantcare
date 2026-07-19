@@ -57,6 +57,7 @@ public class CalendarController {
 
 		// 실제 물준 기록 (watering_log 기준)
 		Map<Integer, Integer> waterCounts = waterService.getMonthlyWaterCounts(year, month, "default");
+		Map<Integer, List<String>> waterDetail = waterService.getMonthlyWaterDetail(year, month, "default");
 
 		model.addAttribute("year", year);
 		model.addAttribute("month", month);
@@ -65,6 +66,7 @@ public class CalendarController {
 		boolean isCurrentMonth = (year == now.getYear() && month == now.getMonthValue());
 		model.addAttribute("today", isCurrentMonth ? now.getDayOfMonth() : 0);
 		model.addAttribute("waterCounts", waterCounts);
+		model.addAttribute("waterDetail", waterDetail);
 
 		// 이전/다음 달
 		YearMonth prev = ym.minusMonths(1);

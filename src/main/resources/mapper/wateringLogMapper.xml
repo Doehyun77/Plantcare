@@ -14,7 +14,7 @@
 	</insert>
 
 	<select id="findByMonth" resultType="WateringLogDTO">
-		SELECT w.* FROM watering_log w
+		SELECT w.*, p.nickname FROM watering_log w
 		JOIN my_plant p ON w.plant_no = p.plant_no
 		WHERE YEAR(w.water_date) = #{year}
 		  AND MONTH(w.water_date) = #{month}
