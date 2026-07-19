@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.ac.tukorea.plantcare.dto.MyPlantDTO;
 import kr.ac.tukorea.plantcare.dto.PlantInfoDTO;
+import kr.ac.tukorea.plantcare.repository.PlantInfoMapper;
 import kr.ac.tukorea.plantcare.service.PlantService;
 import kr.ac.tukorea.plantcare.service.ApiService;
 import kr.ac.tukorea.plantcare.service.CalendarService;
@@ -28,13 +29,15 @@ public class PlantController {
 	private final PlantService plantService;
 	private final ApiService apiService;
 	private final CalendarService calendarService;
+	private final PlantInfoMapper plantInfoMapper;
 
 	private static final String UPLOAD_DIR = "src/main/resources/static/images/plants/";
 
-	public PlantController(PlantService plantService, ApiService apiService, CalendarService calendarService) {
+	public PlantController(PlantService plantService, ApiService apiService, CalendarService calendarService, PlantInfoMapper plantInfoMapper) {
 		this.plantService = plantService;
 		this.apiService = apiService;
 		this.calendarService = calendarService;
+		this.plantInfoMapper = plantInfoMapper;
 	}
 
 	/**
@@ -147,6 +150,13 @@ public class PlantController {
 	@GetMapping("/encyclopedia/detail")
 	public String encyclopediaDetail(@RequestParam("cntntsNo") String cntntsNo, Model model) {
 		PlantInfoDTO info = apiService.getPlantDetail(cntntsNo);
+		// gardenDtl에 이미지 URL이 없으므로, 캐시된 검색 결과에서 이미지 복원
+		if (info != null && info.getImageUrl() == null) {
+			PlantInfoDTO cached = plantInfoMapper.findByCntntsNo(cntntsNo);
+			if (cached != null && cached.getImageUrl() != null) {
+				info.setImageUrl(cached.getImageUrl());
+			}
+		}
 		model.addAttribute("info", info);
 		model.addAttribute("season", calendarService.getCurrentSeasonCode());
 		if (info != null) {
