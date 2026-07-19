@@ -50,6 +50,7 @@ public class HomeController {
 		public int getPlantNo() { return plant.getPlantNo(); }
 		public String getNickname() { return plant.getNickname(); }
 		public String getLastWaterDate() { return plant.getLastWaterDate(); }
+		public String getPhotoPath() { return plant.getPhotoPath(); }
 		public boolean isNeedsWater() { return needsWater; }
 	}
 }
