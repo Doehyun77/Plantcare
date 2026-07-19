@@ -27,11 +27,15 @@ public class HomeController {
 		List<MyPlantDTO> plants = plantService.getMyPlants("default");
 
 		List<PlantWithWater> result = plants.stream().map(p -> {
-			// 계절별 물주기 간격 계산
 			int interval = plantService.getWateringInterval(p);
 			boolean needsWater = calendarService.needsWaterToday(
 				p.getLastWaterDate(), interval);
-			return new PlantWithWater(p, needsWater);
+			String imageUrl = null;
+			if (p.getCntntsNo() != null) {
+				var info = plantService.getPlantInfo(p.getCntntsNo());
+				if (info != null) imageUrl = info.getImageUrl();
+			}
+			return new PlantWithWater(p, needsWater, imageUrl);
 		}).collect(Collectors.toList());
 
 		model.addAttribute("plants", result);
@@ -41,16 +45,19 @@ public class HomeController {
 	public static class PlantWithWater {
 		private final MyPlantDTO plant;
 		private final boolean needsWater;
+		private final String imageUrl;
 
-		public PlantWithWater(MyPlantDTO plant, boolean needsWater) {
+		public PlantWithWater(MyPlantDTO plant, boolean needsWater, String imageUrl) {
 			this.plant = plant;
 			this.needsWater = needsWater;
+			this.imageUrl = imageUrl;
 		}
 
 		public int getPlantNo() { return plant.getPlantNo(); }
 		public String getNickname() { return plant.getNickname(); }
 		public String getLastWaterDate() { return plant.getLastWaterDate(); }
 		public String getPhotoPath() { return plant.getPhotoPath(); }
+		public String getImageUrl() { return imageUrl; }
 		public boolean isNeedsWater() { return needsWater; }
 	}
 }

@@ -48,7 +48,7 @@
 	<div class="home-avatars">
 		<c:forEach var="plant" items="${plants}">
 			<div class="home-avatar-item ${plant.needsWater ? 'due' : ''}">
-				<div class="home-avatar-circle"><c:choose><c:when test="${not empty plant.photoPath}"><img src="${plant.photoPath}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:otherwise>${fn:substring(plant.nickname, 0, 1)}</c:otherwise></c:choose></div>
+				<div class="home-avatar-circle"><c:choose><c:when test="${not empty plant.photoPath}"><img src="${plant.photoPath}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:when test="${not empty plant.imageUrl}"><img src="${plant.imageUrl}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:otherwise>${fn:substring(plant.nickname, 0, 1)}</c:otherwise></c:choose></div>
 				<div class="home-avatar-label">${plant.nickname}</div>
 			</div>
 		</c:forEach>
@@ -63,7 +63,7 @@
 					<c:if test="${plant.needsWater}">
 						<c:set var="anyDue" value="true" />
 						<div class="home-row due">
-							<div class="row-avatar"><c:choose><c:when test="${not empty plant.photoPath}"><img src="${plant.photoPath}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:otherwise>${fn:substring(plant.nickname, 0, 1)}</c:otherwise></c:choose></div>
+							<div class="row-avatar"><c:choose><c:when test="${not empty plant.photoPath}"><img src="${plant.photoPath}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:when test="${not empty plant.imageUrl}"><img src="${plant.imageUrl}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:otherwise>${fn:substring(plant.nickname, 0, 1)}</c:otherwise></c:choose></div>
 							<div class="row-body">
 								<div class="row-name">${plant.nickname}</div>
 								<div class="row-sub">마지막 물: ${plant.lastWaterDate != null ? plant.lastWaterDate : '기록 없음'}</div>
@@ -82,7 +82,7 @@
 					<c:if test="${!plant.needsWater}">
 						<c:set var="anyOk" value="true" />
 						<div class="home-row ok">
-							<div class="row-avatar"><c:choose><c:when test="${not empty plant.photoPath}"><img src="${plant.photoPath}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:otherwise>${fn:substring(plant.nickname, 0, 1)}</c:otherwise></c:choose></div>
+							<div class="row-avatar"><c:choose><c:when test="${not empty plant.photoPath}"><img src="${plant.photoPath}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:when test="${not empty plant.imageUrl}"><img src="${plant.imageUrl}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:otherwise>${fn:substring(plant.nickname, 0, 1)}</c:otherwise></c:choose></div>
 							<div class="row-body">
 								<div class="row-name">${plant.nickname}</div>
 								<div class="row-sub">마지막 물: ${plant.lastWaterDate != null ? plant.lastWaterDate : '기록 없음'}</div>
@@ -100,7 +100,7 @@
 		<div class="home-section-label">내 식물 전체 · ${fn:length(plants)}</div>
 		<c:forEach var="plant" items="${plants}">
 			<div class="home-row">
-				<div class="row-avatar"><c:choose><c:when test="${not empty plant.photoPath}"><img src="${plant.photoPath}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:otherwise>${fn:substring(plant.nickname, 0, 1)}</c:otherwise></c:choose></div>
+				<div class="row-avatar"><c:choose><c:when test="${not empty plant.photoPath}"><img src="${plant.photoPath}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:when test="${not empty plant.imageUrl}"><img src="${plant.imageUrl}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:otherwise>${fn:substring(plant.nickname, 0, 1)}</c:otherwise></c:choose></div>
 				<div class="row-body">
 					<div class="row-name">${plant.nickname}</div>
 					<div class="row-sub">마지막 물: ${plant.lastWaterDate != null ? plant.lastWaterDate : '기록 없음'}</div>
