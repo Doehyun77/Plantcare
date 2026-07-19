@@ -90,6 +90,14 @@ public class PlantService {
 					}
 				}
 				plantInfoMapper.insert(info);
+			} else if (!cntntsNo.startsWith("MANUAL_") && existing.getWaterSpring() == null) {
+				// 검색 단계에서 이름/이미지만 있는 얕은 캐시가 이미 생겨있는 경우(항상 검색 후 등록하므로 흔함)
+				// 상세 API로 물주기 코드 등을 보강
+				PlantInfoDTO detail = apiService.getPlantDetail(cntntsNo);
+				if (detail != null) {
+					detail.setCntntsNo(cntntsNo);
+					plantInfoMapper.updateWaterInfo(detail);
+				}
 			}
 		}
 		myPlantMapper.insert(myPlant);

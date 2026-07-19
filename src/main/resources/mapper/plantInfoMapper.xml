@@ -21,4 +21,16 @@
 	<update id="updateImageUrl">
 		UPDATE plant_info SET image_url = #{imageUrl} WHERE cntnts_no = #{cntntsNo}
 	</update>
+
+	<!-- 검색 단계에서 캐시된 얕은 정보(물주기 코드 없음)를 상세 API 결과로 보강 -->
+	<update id="updateWaterInfo" parameterType="PlantInfoDTO">
+		UPDATE plant_info SET
+			water_spring = #{waterSpring},
+			water_summer = #{waterSummer},
+			water_autumn = #{waterAutumn},
+			water_winter = #{waterWinter},
+			manage_level = #{manageLevel},
+			growth_info = #{growthInfo}
+		WHERE cntnts_no = #{cntntsNo}
+	</update>
 </mapper>

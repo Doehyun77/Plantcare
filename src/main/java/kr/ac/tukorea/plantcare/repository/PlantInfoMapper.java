@@ -8,4 +8,5 @@ public interface PlantInfoMapper {
 	PlantInfoDTO findByCntntsNo(String cntntsNo);
 	void insert(PlantInfoDTO plantInfo);
 	void updateImageUrl(String cntntsNo, String imageUrl);
+	void updateWaterInfo(PlantInfoDTO plantInfo);
 }
