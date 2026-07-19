@@ -63,8 +63,9 @@ public class CalendarController {
 		model.addAttribute("month", month);
 		model.addAttribute("weeks", weeks);
 		// 현재 보고 있는 달이 이번 달일 때만 오늘 강조
+		// -1: 빈 칸(패딩)의 day 값인 0과 절대 겹치지 않도록 함 (다른 달에서 빈 칸이 "오늘"로 잘못 강조되는 버그 방지)
 		boolean isCurrentMonth = (year == now.getYear() && month == now.getMonthValue());
-		model.addAttribute("today", isCurrentMonth ? now.getDayOfMonth() : 0);
+		model.addAttribute("today", isCurrentMonth ? now.getDayOfMonth() : -1);
 		model.addAttribute("waterCounts", waterCounts);
 		model.addAttribute("waterDetail", waterDetail);
 
