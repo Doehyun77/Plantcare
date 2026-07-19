@@ -12,7 +12,15 @@
 <body>
 <c:set var="reqUri" value="${empty requestScope['jakarta.servlet.forward.request_uri'] ? pageContext.request.requestURI : requestScope['jakarta.servlet.forward.request_uri']}" />
 <header>
-	<h1><a href="/">🌱 Plan-Ti</a></h1>
+	<h1>
+		<a href="/" class="logo">
+			<span>Plan</span>
+			<svg class="logo-leaf" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+				<path d="M12 21c0-6 3-9 8-10-1 6-3 9-8 10Z"/>
+			</svg>
+			<span class="logo-accent">Ti</span>
+		</a>
+	</h1>
 	<nav>
 		<a href="/" class="${reqUri == '/' ? 'active' : ''}"><span class="nav-ico">🏠</span>홈</a>
 		<a href="/calendar" class="${fn:startsWith(reqUri, '/calendar') ? 'active' : ''}"><span class="nav-ico">📅</span>캘린더</a>

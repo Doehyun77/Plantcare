@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 </main>
 <footer>
-	<p>&copy; Made by Hendo Jin</p>
+	<p>&copy; 2026 Plan-Ti</p>
 </footer>
 </body>
 </html>
