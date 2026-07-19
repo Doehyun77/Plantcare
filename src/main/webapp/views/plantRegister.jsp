@@ -9,6 +9,7 @@
 			<input type="text" id="searchKeyword" class="reg-search-input" placeholder="식물명을 입력하세요 (예: 스투키)" autocomplete="off">
 			<div id="searchResults" class="search-results"></div>
 		</div>
+		<div id="selectedBadge" class="selected-badge"></div>
 	</div>
 
 	<div class="reg-panel">
@@ -44,6 +45,9 @@
 let debounceTimer;
 $('#searchKeyword').on('input', function() {
 	clearTimeout(debounceTimer);
+	$('#cntntsNo').val('');
+	$('#selectedBadge').removeClass('show').empty();
+	$(this).removeClass('confirmed');
 	const keyword = $(this).val().trim();
 	if (keyword.length < 1) { $('#searchResults').empty(); return; }
 
@@ -72,13 +76,17 @@ $('#searchKeyword').on('input', function() {
 function selectPlant(cntntsNo, name) {
 	$('#cntntsNo').val(cntntsNo);
 	$('#nickname').val(name);
-	$('#searchResults').html('<div class="search-selected">✅ 선택됨: ' + escapeHtml(name) + '</div>');
+	$('#searchKeyword').val(name).addClass('confirmed');
+	$('#searchResults').empty();
+	$('#selectedBadge').html('✅ 선택됨 · ' + escapeHtml(name)).addClass('show');
 }
 
 $('#searchResults').on('click', '#manualBtn', function(e) {
 	e.preventDefault();
 	$('#cntntsNo').val('MANUAL_' + Date.now());
-	$('#searchResults').html('<div class="search-selected search-manual">📝 수동 입력 모드</div>');
+	$('#searchKeyword').addClass('confirmed');
+	$('#searchResults').empty();
+	$('#selectedBadge').html('📝 수동 입력 모드로 등록해요').addClass('show');
 });
 
 function escapeHtml(text) {

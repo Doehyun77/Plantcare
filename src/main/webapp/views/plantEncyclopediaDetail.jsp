@@ -3,71 +3,98 @@
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <%@ include file="/views/layout/header.jsp" %>
 
-<c:choose>
-	<c:when test="${empty info}">
-		<h2>⚠️ 정보를 불러올 수 없습니다</h2>
-		<a href="/plants/encyclopedia">← 도감으로 돌아가기</a>
-	</c:when>
-	<c:otherwise>
-		<h2>🌿 ${info.plantName}</h2>
+<div class="reg-wrap">
 
-		<c:if test="${not empty info.imageUrl}">
-			<img src="${info.imageUrl}" alt="${info.plantName}" style="max-width:300px;border-radius:12px;">
-		</c:if>
+	<a href="/plants/encyclopedia" class="detail-back">← 도감으로 돌아가기</a>
 
-		<table style="width:100%;border-collapse:collapse;margin-top:1rem;">
-			<tr><td style="padding:8px;border-bottom:1px solid #ddd;font-weight:700;width:140px;">학명</td>
-				<td style="padding:8px;border-bottom:1px solid #ddd;"><i>${info.plantSciName}</i></td></tr>
+	<c:choose>
+		<c:when test="${empty info}">
+			<div class="reg-panel">
+				<p class="detail-warn">⚠️ 정보를 불러올 수 없습니다.</p>
+			</div>
+		</c:when>
+		<c:otherwise>
+			<div class="reg-panel">
+				<div class="detail-head">
+					<div class="detail-avatar">
+						<c:choose>
+							<c:when test="${not empty info.imageUrl}">
+								<img src="${fn:split(info.imageUrl, '|')[0]}" alt="">
+							</c:when>
+							<c:otherwise>🌿</c:otherwise>
+						</c:choose>
+					</div>
+					<div>
+						<div class="detail-name">${not empty info.plantName ? info.plantName : (not empty info.distbNm ? info.distbNm : '이름 정보 없음')}</div>
+						<c:if test="${not empty info.plantSciName}">
+							<div class="detail-species">${info.plantSciName}</div>
+						</c:if>
+					</div>
+				</div>
 
-			<tr><td style="padding:8px;border-bottom:1px solid #ddd;font-weight:700;">유통명</td>
-				<td style="padding:8px;border-bottom:1px solid #ddd;">${info.distbNm}</td></tr>
+				<c:if test="${not empty info.manageLevel}">
+					<div class="detail-stats">
+						<div class="detail-stat">
+							<span class="detail-stat-label">관리 난이도</span>
+							<span class="detail-stat-value">${info.manageLevel}</span>
+						</div>
+					</div>
+				</c:if>
+			</div>
 
-			<tr><td style="padding:8px;border-bottom:1px solid #ddd;font-weight:700;">원산지</td>
-				<td style="padding:8px;border-bottom:1px solid #ddd;">${info.orgplceInfo}</td></tr>
+			<div class="reg-panel">
+				<h3>📋 기본 정보</h3>
+				<div class="detail-facts">
+					<c:if test="${not empty info.distbNm}">
+						<div class="detail-fact"><span class="detail-fact-label">유통명</span><span class="detail-fact-value">${info.distbNm}</span></div>
+					</c:if>
+					<c:if test="${not empty info.orgplceInfo}">
+						<div class="detail-fact"><span class="detail-fact-label">원산지</span><span class="detail-fact-value">${info.orgplceInfo}</span></div>
+					</c:if>
+					<c:if test="${not empty info.fncltyInfo}">
+						<div class="detail-fact"><span class="detail-fact-label">기능성</span><span class="detail-fact-value">${info.fncltyInfo}</span></div>
+					</c:if>
+					<c:if test="${not empty info.speclmanageInfo}">
+						<div class="detail-fact"><span class="detail-fact-label">특별 관리</span><span class="detail-fact-value">${info.speclmanageInfo}</span></div>
+					</c:if>
+					<c:if test="${not empty info.toxctyInfo}">
+						<div class="detail-fact"><span class="detail-fact-label">독성 정보</span><span class="detail-fact-value">${info.toxctyInfo}</span></div>
+					</c:if>
+				</div>
+			</div>
 
-			<tr><td style="padding:8px;border-bottom:1px solid #ddd;font-weight:700;">기능성</td>
-				<td style="padding:8px;border-bottom:1px solid #ddd;">${info.fncltyInfo}</td></tr>
+			<div class="reg-panel">
+				<h3>💧 계절별 물주기</h3>
+				<div class="detail-facts">
+					<div class="detail-fact ${season == 'spring' ? 'current' : ''}">
+						<span class="detail-fact-label">봄</span>
+						<span class="detail-fact-value">${info.waterSpringDesc}
+							<c:if test="${springDays != null}">${springDays}일에 한 번</c:if>
+						</span>
+					</div>
+					<div class="detail-fact ${season == 'summer' ? 'current' : ''}">
+						<span class="detail-fact-label">여름</span>
+						<span class="detail-fact-value">${info.waterSummerDesc}
+							<c:if test="${summerDays != null}">${summerDays}일에 한 번</c:if>
+						</span>
+					</div>
+					<div class="detail-fact ${season == 'autumn' ? 'current' : ''}">
+						<span class="detail-fact-label">가을</span>
+						<span class="detail-fact-value">${info.waterAutumnDesc}
+							<c:if test="${autumnDays != null}">${autumnDays}일에 한 번</c:if>
+						</span>
+					</div>
+					<div class="detail-fact ${season == 'winter' ? 'current' : ''}">
+						<span class="detail-fact-label">겨울</span>
+						<span class="detail-fact-value">${info.waterWinterDesc}
+							<c:if test="${winterDays != null}">${winterDays}일에 한 번</c:if>
+						</span>
+					</div>
+				</div>
+			</div>
+		</c:otherwise>
+	</c:choose>
 
-			<tr><td style="padding:8px;border-bottom:1px solid #ddd;font-weight:700;">특별 관리</td>
-				<td style="padding:8px;border-bottom:1px solid #ddd;">${info.speclmanageInfo}</td></tr>
-
-			<tr><td style="padding:8px;border-bottom:1px solid #ddd;font-weight:700;">독성 정보</td>
-				<td style="padding:8px;border-bottom:1px solid #ddd;">${info.toxctyInfo}</td></tr>
-		</table>
-
-		<h3 style="margin-top:1.5rem;">💧 계절별 물주기</h3>
-		<table style="width:100%;border-collapse:collapse;">
-			<tr><td style="padding:8px;border-bottom:1px solid #ddd;font-weight:700;width:140px;">봄</td>
-				<td style="padding:8px;border-bottom:1px solid #ddd;">
-					${info.waterSpringDesc}
-					<c:if test="${info.waterSpring == '053002'}"> (3일에 한 번)</c:if>
-					<c:if test="${info.waterSpring == '053003'}"> (7일에 한 번)</c:if>
-					<c:if test="${info.waterSpring == '053004'}"> (14일에 한 번)</c:if>
-				</td></tr>
-			<tr><td style="padding:8px;border-bottom:1px solid #ddd;font-weight:700;">여름</td>
-				<td style="padding:8px;border-bottom:1px solid #ddd;">
-					${info.waterSummerDesc}
-					<c:if test="${info.waterSummer == '053002'}"> (3일에 한 번)</c:if>
-					<c:if test="${info.waterSummer == '053003'}"> (7일에 한 번)</c:if>
-					<c:if test="${info.waterSummer == '053004'}"> (14일에 한 번)</c:if>
-				</td></tr>
-			<tr><td style="padding:8px;border-bottom:1px solid #ddd;font-weight:700;">가을</td>
-				<td style="padding:8px;border-bottom:1px solid #ddd;">
-					${info.waterAutumnDesc}
-					<c:if test="${info.waterAutumn == '053002'}"> (3일에 한 번)</c:if>
-					<c:if test="${info.waterAutumn == '053003'}"> (7일에 한 번)</c:if>
-					<c:if test="${info.waterAutumn == '053004'}"> (14일에 한 번)</c:if>
-				</td></tr>
-			<tr><td style="padding:8px;border-bottom:1px solid #ddd;font-weight:700;">겨울</td>
-				<td style="padding:8px;border-bottom:1px solid #ddd;">
-					${info.waterWinterDesc}
-					<c:if test="${info.waterWinter == '053002'}"> (3일에 한 번)</c:if>
-					<c:if test="${info.waterWinter == '053003'}"> (7일에 한 번)</c:if>
-					<c:if test="${info.waterWinter == '053004'}"> (14일에 한 번)</c:if>
-				</td></tr>
-		</table>
-		<p style="margin-top:1.5rem;"><a href="/plants/encyclopedia">← 도감으로 돌아가기</a></p>
-	</c:otherwise>
-</c:choose>
+</div>
 
 <%@ include file="/views/layout/footer.jsp" %>
