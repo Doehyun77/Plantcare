@@ -31,7 +31,7 @@ public class PlantController {
 	private final CalendarService calendarService;
 	private final PlantInfoMapper plantInfoMapper;
 
-	private static final String UPLOAD_DIR = "src/main/resources/static/images/plants/";
+	private static final String UPLOAD_DIR = "uploads/images/plants/";
 
 	public PlantController(PlantService plantService, ApiService apiService, CalendarService calendarService, PlantInfoMapper plantInfoMapper) {
 		this.plantService = plantService;
