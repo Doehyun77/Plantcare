@@ -109,7 +109,6 @@
 					<button class="row-check" onclick="waterPlant(${plant.plantNo})">체크</button>
 				</c:if>
 				<a class="row-detail" href="/plants/detail?plantNo=${plant.plantNo}">상세</a>
-				<button type="button" class="row-delete">삭제</button>
 			</div>
 		</c:forEach>
 	</div>
