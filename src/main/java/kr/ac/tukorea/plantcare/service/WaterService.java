@@ -77,6 +77,20 @@ public class WaterService {
 		return counts;
 	}
 
+	/**
+	 * 날짜별로 그날 물 준 식물 별명 목록 (달력에서 날짜 클릭 시 보여주기용)
+	 */
+	public Map<Integer, List<String>> getMonthlyWaterDetail(int year, int month, String userId) {
+		List<WateringLogDTO> logs = wateringLogMapper.findByMonth(year, month, userId);
+		Map<Integer, List<String>> detail = new HashMap<>();
+		for (WateringLogDTO log : logs) {
+			if (log.getWaterDate() == null) continue;
+			int day = LocalDate.parse(log.getWaterDate()).getDayOfMonth();
+			detail.computeIfAbsent(day, k -> new java.util.ArrayList<>()).add(log.getNickname());
+		}
+		return detail;
+	}
+
 	public static class CalendarDay {
 		private final int plantNo;
 		private final String nickname;
