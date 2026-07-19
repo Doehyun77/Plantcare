@@ -29,7 +29,14 @@ public class PlantService {
 	 * API 검색 (자동완성용)
 	 */
 	public List<PlantInfoDTO> searchPlants(String keyword) {
-		return apiService.searchPlants(keyword);
+		List<PlantInfoDTO> results = apiService.searchPlants(keyword);
+		// 검색 결과를 DB에 캐시 (이미지 URL 포함)
+		for (PlantInfoDTO item : results) {
+			if (item.getCntntsNo() != null && plantInfoMapper.findByCntntsNo(item.getCntntsNo()) == null) {
+				plantInfoMapper.insert(item);
+			}
+		}
+		return results;
 	}
 
 	/**
