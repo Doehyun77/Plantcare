@@ -32,8 +32,13 @@ public class PlantService {
 		List<PlantInfoDTO> results = apiService.searchPlants(keyword);
 		// 검색 결과를 DB에 캐시 (이미지 URL 포함)
 		for (PlantInfoDTO item : results) {
-			if (item.getCntntsNo() != null && plantInfoMapper.findByCntntsNo(item.getCntntsNo()) == null) {
+			if (item.getCntntsNo() == null || item.getImageUrl() == null) continue;
+			PlantInfoDTO existing = plantInfoMapper.findByCntntsNo(item.getCntntsNo());
+			if (existing == null) {
 				plantInfoMapper.insert(item);
+			} else if (existing.getImageUrl() == null) {
+				// 기존 레코드에 이미지 URL이 없으면 업데이트
+				plantInfoMapper.updateImageUrl(item.getCntntsNo(), item.getImageUrl());
 			}
 		}
 		return results;

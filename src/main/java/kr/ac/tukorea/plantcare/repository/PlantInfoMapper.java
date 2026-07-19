@@ -7,4 +7,5 @@ import kr.ac.tukorea.plantcare.dto.PlantInfoDTO;
 public interface PlantInfoMapper {
 	PlantInfoDTO findByCntntsNo(String cntntsNo);
 	void insert(PlantInfoDTO plantInfo);
+	void updateImageUrl(String cntntsNo, String imageUrl);
 }
