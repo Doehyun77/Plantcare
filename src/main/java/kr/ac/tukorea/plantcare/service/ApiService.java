@@ -22,7 +22,6 @@ public class ApiService {
 	private String apiKey;
 
 	private static final String BASE_URL = "http://api.nongsaro.go.kr/service/garden";
-	private static final String IMAGE_BASE_URL = "http://www.nongsaro.go.kr/cms_contents/";
 
 	public ApiService() {
 		this.restTemplate = new RestTemplate();
@@ -112,7 +111,11 @@ public class ApiService {
 		PlantInfoDTO dto = new PlantInfoDTO();
 		dto.setCntntsNo(getText(item, "cntntsNo"));
 		dto.setPlantName(getText(item, "cntntsSj"));
-		dto.setImageUrl(buildImageUrl(getText(item, "rtnStreFileNm")));
+		// rtnFileUrl: 전체 URL이 pipe로 여러 개 (|), 첫 번째 사용
+		String fileUrl = getText(item, "rtnFileUrl");
+		if (fileUrl != null && !fileUrl.isEmpty()) {
+			dto.setImageUrl(fileUrl.split("\\|")[0].trim());
+		}
 		return dto;
 	}
 
@@ -123,7 +126,7 @@ public class ApiService {
 		dto.setPlantSciName(getText(item, "plntbneNm"));
 		dto.setPlantEngName(getText(item, "plntzrNm"));
 		dto.setDistbNm(getText(item, "distbNm"));
-		dto.setImageUrl(buildImageUrl(getText(item, "rtnStreFileNm")));
+		// gardenDtl에 이미지 필드가 없어 imageUrl 설정 안 함 (search에서 캐시된 값 사용)
 		dto.setWaterSpring(getText(item, "watercycleSprngCode"));
 		dto.setWaterSpringDesc(getText(item, "watercycleSprngCodeNm"));
 		dto.setWaterSummer(getText(item, "watercycleSummerCode"));
@@ -146,9 +149,4 @@ public class ApiService {
 		return (v.isMissingNode() || v.isNull()) ? null : v.asText();
 	}
 
-	private String buildImageUrl(String path) {
-		if (path == null || path.isEmpty()) return null;
-		if (path.startsWith("http://") || path.startsWith("https://")) return path;
-		return IMAGE_BASE_URL + path;
-	}
 }
