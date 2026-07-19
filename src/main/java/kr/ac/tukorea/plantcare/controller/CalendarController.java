@@ -61,7 +61,9 @@ public class CalendarController {
 		model.addAttribute("year", year);
 		model.addAttribute("month", month);
 		model.addAttribute("weeks", weeks);
-		model.addAttribute("today", now.getDayOfMonth());
+		// 현재 보고 있는 달이 이번 달일 때만 오늘 강조
+		boolean isCurrentMonth = (year == now.getYear() && month == now.getMonthValue());
+		model.addAttribute("today", isCurrentMonth ? now.getDayOfMonth() : 0);
 		model.addAttribute("waterCounts", waterCounts);
 
 		// 이전/다음 달
