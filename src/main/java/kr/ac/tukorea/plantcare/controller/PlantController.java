@@ -94,7 +94,8 @@ public class PlantController {
 		model.addAttribute("plant", plant);
 		int interval = plantService.getWateringInterval(plant);
 		model.addAttribute("actualInterval", interval);
-		PlantInfoDTO info = plantService.getPlantInfo(plant.getCntntsNo());
+		String cntntsNo = plant.getCntntsNo();
+		PlantInfoDTO info = (cntntsNo != null) ? plantService.getPlantInfo(cntntsNo) : null;
 		model.addAttribute("info", info);
 		model.addAttribute("needsWater",
 			calendarService.needsWaterToday(plant.getLastWaterDate(), interval));

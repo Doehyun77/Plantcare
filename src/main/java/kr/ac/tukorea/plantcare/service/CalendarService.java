@@ -66,11 +66,14 @@ public class CalendarService {
 	 * @param interval 물주기 간격(일)
 	 */
 	public boolean needsWaterToday(String lastWaterDate, int interval) {
-		if (lastWaterDate == null) return true;
-
-		LocalDate last = LocalDate.parse(lastWaterDate);
-		long daysSince = ChronoUnit.DAYS.between(last, LocalDate.now());
-		return daysSince >= interval;
+		if (lastWaterDate == null || lastWaterDate.isBlank()) return true;
+		try {
+			LocalDate last = LocalDate.parse(lastWaterDate);
+			long daysSince = ChronoUnit.DAYS.between(last, LocalDate.now());
+			return daysSince >= interval;
+		} catch (Exception e) {
+			return true; // 날짜 파싱 실패 → 안전하게 물 필요로 처리
+		}
 	}
 
 	/**
