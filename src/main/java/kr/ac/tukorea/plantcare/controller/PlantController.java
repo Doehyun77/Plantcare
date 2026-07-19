@@ -18,6 +18,7 @@ import kr.ac.tukorea.plantcare.dto.PlantInfoDTO;
 import kr.ac.tukorea.plantcare.repository.PlantInfoMapper;
 import kr.ac.tukorea.plantcare.service.PlantService;
 import kr.ac.tukorea.plantcare.service.ApiService;
+import kr.ac.tukorea.plantcare.service.CalendarService;
 
 @Controller
 @RequestMapping("/plants")
@@ -25,13 +26,15 @@ public class PlantController {
 
 	private final PlantService plantService;
 	private final ApiService apiService;
+	private final CalendarService calendarService;
 	private final PlantInfoMapper plantInfoMapper;
 
 	private static final String UPLOAD_DIR = "src/main/resources/static/images/plants/";
 
-	public PlantController(PlantService plantService, ApiService apiService, PlantInfoMapper plantInfoMapper) {
+	public PlantController(PlantService plantService, ApiService apiService, CalendarService calendarService, PlantInfoMapper plantInfoMapper) {
 		this.plantService = plantService;
 		this.apiService = apiService;
+		this.calendarService = calendarService;
 		this.plantInfoMapper = plantInfoMapper;
 	}
 
@@ -91,7 +94,26 @@ public class PlantController {
 		model.addAttribute("plant", plant);
 		int interval = plantService.getWateringInterval(plant);
 		model.addAttribute("actualInterval", interval);
+		PlantInfoDTO info = plantService.getPlantInfo(plant.getCntntsNo());
+		model.addAttribute("info", info);
+		model.addAttribute("needsWater",
+			calendarService.needsWaterToday(plant.getLastWaterDate(), interval));
+		model.addAttribute("season", calendarService.getCurrentSeasonCode());
+
+		if (info != null) {
+			model.addAttribute("springDays", codeToDays(info.getWaterSpring()));
+			model.addAttribute("summerDays", codeToDays(info.getWaterSummer()));
+			model.addAttribute("autumnDays", codeToDays(info.getWaterAutumn()));
+			model.addAttribute("winterDays", codeToDays(info.getWaterWinter()));
+		}
 		return "plantDetail";
+	}
+
+	/**
+	 * 계절별 물주기 코드 -> 일수 (코드 없으면 null, 화면에 표시 안 함)
+	 */
+	private Integer codeToDays(String code) {
+		return code != null ? calendarService.getIntervalFromCode(code) : null;
 	}
 
 	/**

@@ -1,28 +1,43 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ include file="/views/layout/header.jsp" %>
-<h2>🌱 식물 등록</h2>
 
-<!-- API 검색 -->
-<section>
-	<h3>🔍 식물 검색</h3>
-	<input type="text" id="searchKeyword" placeholder="식물명을 입력하세요 (예: 스투키)" autocomplete="off">
-	<div id="searchResults" style="margin-top:10px;"></div>
-</section>
+<div class="reg-wrap">
+	<div class="reg-panel">
+		<h3>🔍 식물 검색</h3>
+		<div class="reg-search-wrap">
+			<input type="text" id="searchKeyword" class="reg-search-input" placeholder="식물명을 입력하세요 (예: 스투키)" autocomplete="off">
+			<div id="searchResults" class="search-results"></div>
+		</div>
+	</div>
 
-<hr>
+	<div class="reg-panel">
+		<h3>🌱 등록 정보</h3>
+		<form id="registerForm" action="/plants/register" method="post" enctype="multipart/form-data" novalidate>
+			<input type="hidden" name="cntntsNo" id="cntntsNo">
 
-<!-- 등록 폼 -->
-<form id="registerForm" action="/plants/register" method="post" enctype="multipart/form-data">
-	<input type="hidden" name="cntntsNo" id="cntntsNo">
+			<div class="form-field">
+				<label for="nickname">별명</label>
+				<input type="text" name="nickname" id="nickname" required>
+				<span class="field-error" id="nickname-error">별명을 입력해주세요.</span>
+			</div>
+			<div class="form-field">
+				<label for="photo">사진</label>
+				<input type="file" name="photo" id="photo" accept="image/*">
+			</div>
+			<div class="form-field">
+				<label for="userWaterInterval">물주기 간격 (일)</label>
+				<input type="number" name="userWaterInterval" id="userWaterInterval" placeholder="입력하지 않아도 자동으로 들어가요 !">
+			</div>
+			<div class="form-field">
+				<label for="lastWaterDate">마지막 물 준 날짜</label>
+				<input type="date" name="lastWaterDate" id="lastWaterDate" min="1900-01-01" max="2099-12-31">
+			</div>
 
-	<label>별명 <input type="text" name="nickname" id="nickname" required></label><br>
-	<label>사진 <input type="file" name="photo" accept="image/*"></label><br>
-	<label>물주기 간격 (일) <input type="number" name="userWaterInterval" id="userWaterInterval" placeholder="비우면 API 기본값"></label><br>
-	<label>마지막 물 준 날짜 <input type="date" name="lastWaterDate" id="lastWaterDate"></label><br>
-
-	<button type="submit">등록</button>
-</form>
+			<button type="submit" class="btn-primary">등록하기</button>
+		</form>
+	</div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
@@ -33,21 +48,23 @@ $('#searchKeyword').on('input', function() {
 	if (keyword.length < 1) { $('#searchResults').empty(); return; }
 
 	debounceTimer = setTimeout(function() {
+		$('#searchResults').html('<div class="search-loading"><span class="spinner"></span>검색 중...</div>');
 		$.get('/plants/search', { keyword: keyword }, function(data) {
-			let html = '<ul style="list-style:none;padding:0;">';
+			let html = '';
 			if (data.length === 0) {
-				html += '<li>검색 결과가 없습니다. <a href="#" id="manualBtn">수동 입력</a></li>';
+				html += '<p class="search-empty">검색 결과가 없습니다. <a href="#" id="manualBtn">수동 입력</a></p>';
 			} else {
 				data.forEach(function(item) {
-					html += '<li style="padding:8px;border:1px solid #ddd;margin:4px 0;cursor:pointer;" '
-						+ 'onclick="selectPlant(\'' + item.cntntsNo + '\', \'' + escapeHtml(item.plantName) + '\')">'
-						+ (item.imageUrl ? '<img src="' + item.imageUrl + '" style="width:50px;height:50px;vertical-align:middle;"> ' : '')
-						+ '<strong>' + escapeHtml(item.plantName) + '</strong>'
-						+ '</li>';
+					const thumb = item.imageUrl ? item.imageUrl.split('|')[0] : '';
+					html += '<div class="search-row" onclick="selectPlant(\'' + item.cntntsNo + '\', \'' + escapeHtml(item.plantName) + '\')">'
+						+ (thumb ? '<img src="' + thumb + '" alt="">' : '<span class="search-row-noimg">🌱</span>')
+						+ '<span class="name">' + escapeHtml(item.plantName) + '</span>'
+						+ '</div>';
 				});
 			}
-			html += '</ul>';
 			$('#searchResults').html(html);
+		}).fail(function() {
+			$('#searchResults').html('<p class="search-empty">검색 중 오류가 발생했어요. 다시 시도해주세요.</p>');
 		});
 	}, 300);
 });
@@ -55,18 +72,35 @@ $('#searchKeyword').on('input', function() {
 function selectPlant(cntntsNo, name) {
 	$('#cntntsNo').val(cntntsNo);
 	$('#nickname').val(name);
-	$('#searchResults').html('<p>✅ 선택됨: <strong>' + escapeHtml(name) + '</strong></p>');
+	$('#searchResults').html('<div class="search-selected">✅ 선택됨: ' + escapeHtml(name) + '</div>');
 }
 
 $('#searchResults').on('click', '#manualBtn', function(e) {
 	e.preventDefault();
 	$('#cntntsNo').val('MANUAL_' + Date.now());
-	$('#searchResults').html('<p>📝 수동 입력 모드</p>');
+	$('#searchResults').html('<div class="search-selected search-manual">📝 수동 입력 모드</div>');
 });
 
 function escapeHtml(text) {
 	return $('<span>').text(text).html();
 }
+
+$('#registerForm').on('submit', function(e) {
+	const nickname = $('#nickname').val().trim();
+	if (!nickname) {
+		e.preventDefault();
+		$('#nickname').addClass('invalid');
+		$('#nickname-error').addClass('show');
+		$('#nickname').trigger('focus');
+	}
+});
+
+$('#nickname').on('input', function() {
+	if ($(this).val().trim()) {
+		$(this).removeClass('invalid');
+		$('#nickname-error').removeClass('show');
+	}
+});
 </script>
 
 <%@ include file="/views/layout/footer.jsp" %>
