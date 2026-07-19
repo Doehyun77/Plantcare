@@ -191,6 +191,7 @@ header nav .nav-ico { font-size: clamp(.85rem, 2.5vw, 1rem); }
 	display: flex; align-items: center; gap: .8rem;
 	background: var(--tile-bg); border-radius: 14px; padding: .6rem .9rem;
 	cursor: pointer; transition: background .15s ease;
+	color: #222; text-decoration: none;
 }
 .search-row:hover { background: var(--due-bg); }
 .search-row img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
@@ -210,13 +211,14 @@ header nav .nav-ico { font-size: clamp(.85rem, 2.5vw, 1rem); }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* 검색 결과 선택됨 / 수동입력 모드 상태 표시 */
-.search-selected {
-	display: flex; align-items: center; gap: .5rem;
-	background: var(--ok-bg); color: var(--ok-ink); border-radius: 14px;
-	padding: .7rem .9rem; font-weight: 700; font-size: .9rem;
+/* 검색어 입력창 옆 식물 선택 완료 배지 (결과 드롭다운과 별개로 항상 보임) */
+.reg-search-input.confirmed { box-shadow: 0 0 0 2px var(--ok-ink); }
+.selected-badge {
+	display: none; align-items: center; gap: .4rem; width: max-content;
+	margin-top: .7rem; background: var(--ok-bg); color: var(--ok-ink);
+	border-radius: 999px; padding: .5rem .9rem; font-weight: 700; font-size: .86rem;
 }
-.search-manual { background: var(--tile-bg); color: var(--sub); }
+.selected-badge.show { display: flex; }
 
 /* 폼 필드 공통(라벨 + 인풋) */
 .form-field { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1.1rem; }

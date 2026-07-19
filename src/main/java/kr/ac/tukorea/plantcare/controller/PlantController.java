@@ -1,7 +1,9 @@
 package kr.ac.tukorea.plantcare.controller;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
@@ -118,6 +120,18 @@ public class PlantController {
 	}
 
 	/**
+	 * gardenDtl API 응답엔 이미지 URL이 없으므로, 캐시된 검색 결과에서 이미지 복원
+	 */
+	private void restoreImageIfMissing(PlantInfoDTO info, String cntntsNo) {
+		if (info != null && info.getImageUrl() == null) {
+			PlantInfoDTO cached = plantInfoMapper.findByCntntsNo(cntntsNo);
+			if (cached != null && cached.getImageUrl() != null) {
+				info.setImageUrl(cached.getImageUrl());
+			}
+		}
+	}
+
+	/**
 	 * 수정 처리
 	 */
 	@PostMapping("/update")
@@ -149,14 +163,35 @@ public class PlantController {
 	@GetMapping("/encyclopedia/detail")
 	public String encyclopediaDetail(@RequestParam("cntntsNo") String cntntsNo, Model model) {
 		PlantInfoDTO info = apiService.getPlantDetail(cntntsNo);
-		// gardenDtl에 이미지 URL이 없으므로, 캐시된 검색 결과에서 이미지 복원
-		if (info != null && info.getImageUrl() == null) {
-			PlantInfoDTO cached = plantInfoMapper.findByCntntsNo(cntntsNo);
-			if (cached != null && cached.getImageUrl() != null) {
-				info.setImageUrl(cached.getImageUrl());
-			}
-		}
+		restoreImageIfMissing(info, cntntsNo);
 		model.addAttribute("info", info);
+		model.addAttribute("season", calendarService.getCurrentSeasonCode());
+		if (info != null) {
+			model.addAttribute("springDays", codeToDays(info.getWaterSpring()));
+			model.addAttribute("summerDays", codeToDays(info.getWaterSummer()));
+			model.addAttribute("autumnDays", codeToDays(info.getWaterAutumn()));
+			model.addAttribute("winterDays", codeToDays(info.getWaterWinter()));
+		}
 		return "plantEncyclopediaDetail";
+	}
+
+	/**
+	 * 도감: 식물 상세 정보 (Ajax, JSON 응답 - 검색 화면에서 바로 펼쳐 보여주기용)
+	 */
+	@GetMapping("/encyclopedia/info")
+	@ResponseBody
+	public Map<String, Object> encyclopediaInfo(@RequestParam("cntntsNo") String cntntsNo) {
+		PlantInfoDTO info = apiService.getPlantDetail(cntntsNo);
+		restoreImageIfMissing(info, cntntsNo);
+		Map<String, Object> result = new LinkedHashMap<>();
+		result.put("info", info);
+		result.put("season", calendarService.getCurrentSeasonCode());
+		if (info != null) {
+			result.put("springDays", codeToDays(info.getWaterSpring()));
+			result.put("summerDays", codeToDays(info.getWaterSummer()));
+			result.put("autumnDays", codeToDays(info.getWaterAutumn()));
+			result.put("winterDays", codeToDays(info.getWaterWinter()));
+		}
+		return result;
 	}
 }
