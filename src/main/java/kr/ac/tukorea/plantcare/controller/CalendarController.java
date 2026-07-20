@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.ac.tukorea.plantcare.service.WaterService;
 
@@ -80,11 +79,5 @@ public class CalendarController {
 		return "calendar";
 	}
 
-	@GetMapping("/api/calendar-data")
-	@ResponseBody
-	public Map<Integer, Integer> getCalendarData(
-			@RequestParam("year") int year,
-			@RequestParam("month") int month) {
-		return waterService.getMonthlyWaterCounts(year, month, "default");
 	}
 }

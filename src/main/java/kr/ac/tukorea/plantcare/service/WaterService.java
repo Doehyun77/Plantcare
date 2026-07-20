@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -18,16 +17,11 @@ public class WaterService {
 
 	private final WateringLogMapper wateringLogMapper;
 	private final MyPlantMapper myPlantMapper;
-	private final CalendarService calendarService;
-	private final PlantService plantService;
 
 	public WaterService(WateringLogMapper wateringLogMapper,
-			MyPlantMapper myPlantMapper, CalendarService calendarService,
-			PlantService plantService) {
+			MyPlantMapper myPlantMapper) {
 		this.wateringLogMapper = wateringLogMapper;
 		this.myPlantMapper = myPlantMapper;
-		this.calendarService = calendarService;
-		this.plantService = plantService;
 	}
 
 	/**
@@ -45,22 +39,6 @@ public class WaterService {
 			plant.setLastWaterDate(today);
 			myPlantMapper.update(plant);
 		}
-	}
-
-	/**
-	 * 월별 물주기 데이터 (계절별 간격 반영)
-	 */
-	public List<CalendarDay> getMonthlyWaterData(int year, int month, String userId) {
-		List<MyPlantDTO> plants = myPlantMapper.findAllByUserId(userId);
-
-		return plants.stream()
-			.filter(p -> "N".equals(p.getDelYn()))
-			.map(p -> {
-				int interval = plantService.getWateringInterval(p);
-				return new CalendarDay(p.getPlantNo(), p.getNickname(),
-					p.getLastWaterDate(), interval);
-			})
-			.collect(Collectors.toList());
 	}
 
 	/**
@@ -89,25 +67,5 @@ public class WaterService {
 			detail.computeIfAbsent(day, k -> new java.util.ArrayList<>()).add(log.getNickname());
 		}
 		return detail;
-	}
-
-	public static class CalendarDay {
-		private final int plantNo;
-		private final String nickname;
-		private final String lastWaterDate;
-		private final int interval;
-
-		public CalendarDay(int plantNo, String nickname,
-				String lastWaterDate, int interval) {
-			this.plantNo = plantNo;
-			this.nickname = nickname;
-			this.lastWaterDate = lastWaterDate;
-			this.interval = interval;
-		}
-
-		public int getPlantNo() { return plantNo; }
-		public String getNickname() { return nickname; }
-		public String getLastWaterDate() { return lastWaterDate; }
-		public int getInterval() { return interval; }
 	}
 }

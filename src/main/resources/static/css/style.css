@@ -89,7 +89,6 @@ header nav .nav-ico { font-size: clamp(.85rem, 2.5vw, 1rem); }
 .home-row.ok .row-sub { color: var(--ok-ink); }
 .home-row .row-check { border: none; border-radius: 999px; font-weight: 800; font-size: .84rem; padding: .55rem 1.05rem; cursor: pointer; background: var(--due-ink); color: #f1f8ff; }
 .home-row .row-detail { font-size: .84rem; font-weight: 700; color: var(--sub); text-decoration: none; }
-.home-row .row-delete { border: none; background: none; font-size: .84rem; font-weight: 700; color: #d64545; cursor: pointer; margin-left: .7rem; padding: 0; }
 
 /* 새 식물 등록 유도 타일 */
 .home-add-tile { display: flex; align-items: center; justify-content: center; gap: .4rem; background: var(--tile-bg); border-radius: 18px; padding: .85rem; font-size: .84rem; font-weight: 800; color: var(--sub); text-decoration: none; margin-top: .2rem; }
