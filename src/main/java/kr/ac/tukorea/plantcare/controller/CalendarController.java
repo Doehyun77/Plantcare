@@ -78,6 +78,4 @@ public class CalendarController {
 
 		return "calendar";
 	}
-
-	}
 }
