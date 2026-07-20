@@ -34,3 +34,4 @@ build/
 api_test*.xml
 api_dtl.xml
 uploads/
+.gjc/
