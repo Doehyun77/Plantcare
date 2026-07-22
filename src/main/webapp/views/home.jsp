@@ -19,7 +19,7 @@
 
 	<div class="home-hero">
 		<div class="home-hero-text">
-			<p class="who">${sessionScope.nickname} 님의 정원</p>
+			<p class="who"><span class="who-name">${sessionScope.nickname}</span> 님의 정원</p>
 			<div class="stat">
 				<span class="num">${dueCount}</span>
 				<span class="label">

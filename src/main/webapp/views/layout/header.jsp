@@ -22,16 +22,18 @@
 		</a>
 	</h1>
 	<nav>
-		<a href="/" class="${reqUri == '/' ? 'active' : ''}"><span class="nav-ico">🏠</span>홈</a>
-		<a href="/calendar" class="${fn:startsWith(reqUri, '/calendar') ? 'active' : ''}"><span class="nav-ico">📅</span>캘린더</a>
-		<a href="/plants/register" class="${fn:startsWith(reqUri, '/plants/register') ? 'active' : ''}"><span class="nav-ico">🌿</span>식물등록</a>
-		<a href="/plants/encyclopedia" class="${fn:startsWith(reqUri, '/plants/encyclopedia') ? 'active' : ''}"><span class="nav-ico">📖</span>도감</a>
+		<c:if test="${not empty sessionScope.nickname}">
+			<a href="/" class="${reqUri == '/' ? 'active' : ''}"><span class="nav-ico">🏠</span>홈</a>
+			<a href="/calendar" class="${fn:startsWith(reqUri, '/calendar') ? 'active' : ''}"><span class="nav-ico">📅</span>캘린더</a>
+			<a href="/plants/register" class="${fn:startsWith(reqUri, '/plants/register') ? 'active' : ''}"><span class="nav-ico">🌿</span>식물등록</a>
+			<a href="/plants/encyclopedia" class="${fn:startsWith(reqUri, '/plants/encyclopedia') ? 'active' : ''}"><span class="nav-ico">📖</span>도감</a>
+		</c:if>
 		<c:choose>
 			<c:when test="${not empty sessionScope.nickname}">
-				<a href="/logout" class="nav-logout">로그아웃</a>
+				<a href="/logout" id="logoutLink" class="nav-logout"><span class="nav-ico">🚪</span>로그아웃</a>
 			</c:when>
 			<c:otherwise>
-				<a href="/login" class="nav-login">로그인</a>
+				<a href="/login" class="nav-login"><span class="nav-ico">🔐</span>로그인</a>
 			</c:otherwise>
 		</c:choose>
 	</nav>

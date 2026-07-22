@@ -52,6 +52,7 @@ header nav .nav-ico { font-size: clamp(.85rem, 2.5vw, 1rem); }
 .home-hero { background: var(--brand); color: #eff8f2; border-radius: 24px; padding: 2rem 2.2rem; margin: 1rem 0 1.6rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; position: relative; overflow: hidden; }
 .home-hero-text { flex: 1; min-width: 0; }
 .home-hero .who { font-size: .92rem; opacity: .85; margin-bottom: .6rem; }
+.home-hero .who-name { font-size: 1.16rem; }
 .home-hero .stat { display: flex; align-items: baseline; gap: .5rem; margin-bottom: .35rem; }
 .home-hero .stat .num { font-size: 3.6rem; font-weight: 800; line-height: 1; }
 .home-hero .stat .label { font-size: 1.2rem; font-weight: 700; opacity: .9; }
@@ -225,17 +226,19 @@ header nav .nav-ico { font-size: clamp(.85rem, 2.5vw, 1rem); }
 
 /* 폼 필드 공통(라벨 + 인풋) */
 .form-field { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1.1rem; }
-.form-field label { font-size: .84rem; font-weight: 700; color: var(--sub); }
+.form-field label { font-size: .84rem; font-weight: 700; color: var(--sub); padding-left: .85rem; }
 .form-field input[type=text],
 .form-field input[type=number],
-.form-field input[type=date] {
-	border: none; background: var(--tile-bg); border-radius: 10px;
+.form-field input[type=date],
+.form-field input[type=password] {
+	width: 100%; border: none; background: var(--tile-bg); border-radius: 10px;
 	padding: .65rem .85rem; font-size: .9rem; font-family: inherit; color: #222; outline: none;
 	box-shadow: 0 0 0 2px transparent; transition: box-shadow .15s ease;
 }
 .form-field input[type=text]:focus,
 .form-field input[type=number]:focus,
-.form-field input[type=date]:focus { box-shadow: 0 0 0 2px var(--brand); }
+.form-field input[type=date]:focus,
+.form-field input[type=password]:focus { box-shadow: 0 0 0 2px var(--brand); }
 
 /* 숫자 입력(물주기 간격) 업다운 스피너 제거 */
 .form-field input[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -265,8 +268,44 @@ header nav .nav-ico { font-size: clamp(.85rem, 2.5vw, 1rem); }
 .btn-primary:hover { opacity: .92; }
 
 /* 물주기 간격 비워둘 때 안내 문구 */
-.form-hint { display: block; font-size: .78rem; color: var(--sub); margin-top: .35rem; }
+.form-hint { display: block; font-size: .78rem; color: var(--sub); margin-top: .35rem; padding-left: .85rem; }
 /* ---- 식물 등록 화면 끝 ---- */
+
+/* ---- 로그인/회원가입 화면 시작 ---- */
+
+/* 화면 중앙에 카드 하나만 떠 있는 레이아웃 */
+.auth-wrap { display: flex; justify-content: center; padding: 2.5rem 0; }
+.auth-panel {
+	background: #fff; border-radius: 24px; padding: 2.2rem 2rem;
+	box-shadow: 0 2px 8px rgba(30,50,35,.05);
+	width: 100%; max-width: 360px; text-align: center;
+}
+
+/* 카드 상단 원형 아이콘 */
+.auth-badge {
+	width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 1rem;
+	background: var(--ok-bg); display: flex; align-items: center; justify-content: center;
+	font-size: 1.8rem;
+}
+.auth-title { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+.auth-sub { font-size: .86rem; color: var(--sub); margin-bottom: 1.6rem; }
+
+/* 폼 자체는 왼쪽 정렬(라벨/인풋), 카드만 중앙 정렬 */
+.auth-form { text-align: left; }
+
+/* 로그인 실패/회원가입 실패 안내 배너 */
+.auth-error {
+	background: #fdecec; color: #d64545; font-size: .84rem; font-weight: 700;
+	border-radius: 12px; padding: .7rem .9rem; margin-bottom: 1.1rem;
+}
+
+/* 로그인/가입하기 버튼은 카드 폭 전체를 채움 */
+.auth-submit { width: 100%; text-align: center; padding: .75rem 1rem; font-size: .9rem; margin-top: .2rem; }
+
+.auth-switch { font-size: .86rem; color: var(--sub); margin-top: 1.2rem; }
+.auth-switch a { color: var(--brand); font-weight: 700; text-decoration: none; }
+.auth-switch a:hover { text-decoration: underline; }
+/* ---- 로그인/회원가입 화면 끝 ---- */
 
 /* ---- 식물 상세 화면 시작 ---- */
 
@@ -330,6 +369,10 @@ header nav .nav-ico { font-size: clamp(.85rem, 2.5vw, 1rem); }
 .modal-title { font-size: 1rem; font-weight: 800; margin-bottom: .4rem; }
 .modal-desc { font-size: .86rem; color: var(--sub); margin-bottom: 1.4rem; line-height: 1.5; }
 .modal-actions { display: flex; gap: .6rem; justify-content: flex-end; }
+
+/* 로그아웃 확인 모달만 문구/버튼 중앙 정렬 */
+#logoutModal .modal-title { text-align: center; }
+#logoutModal .modal-actions { justify-content: center; }
 
 /* 모달 우상단 닫기(X) 버튼 */
 .modal-close {
