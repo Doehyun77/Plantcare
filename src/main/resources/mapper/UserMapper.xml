@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.ac.tukorea.plantcare.repository.UserMapper">
+
+    <select id="findByUserId" parameterType="String" resultType="UserDTO">
+        SELECT user_id, password, nickname, reg_date
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="countByUserId" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="UserDTO">
+        INSERT INTO user (user_id, password, nickname)
+        VALUES (#{userId}, #{password}, #{nickname})
+    </insert>
+
+</mapper>

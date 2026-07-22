@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.servlet.http.HttpSession;
 import kr.ac.tukorea.plantcare.service.WaterService;
 
 @Controller
@@ -18,12 +19,10 @@ public class WaterController {
 		this.waterService = waterService;
 	}
 
-	/**
-	 * 간편체크 (Ajax POST)
-	 */
 	@PostMapping("/check")
 	@ResponseBody
-	public String check(@RequestParam("plantNo") int plantNo) {
+	public String check(@RequestParam("plantNo") int plantNo, HttpSession session) {
+		if (session.getAttribute("userId") == null) return "unauthorized";
 		waterService.checkWater(plantNo);
 		return "ok";
 	}
