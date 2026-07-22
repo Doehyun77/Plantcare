@@ -22,8 +22,9 @@ public class WaterController {
 	@PostMapping("/check")
 	@ResponseBody
 	public String check(@RequestParam("plantNo") int plantNo, HttpSession session) {
-		if (session.getAttribute("userId") == null) return "unauthorized";
-		waterService.checkWater(plantNo);
-		return "ok";
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) return "unauthorized";
+		boolean success = waterService.checkWater(plantNo, userId);
+		return success ? "ok" : "unauthorized";
 	}
 }

@@ -97,9 +97,11 @@ public class PlantController {
 	@GetMapping("/detail")
 	public String detail(@RequestParam("plantNo") int plantNo, Model model,
 			HttpSession session) {
-		if (session.getAttribute("userId") == null) return "redirect:/login";
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) return "redirect:/login";
 
 		MyPlantDTO plant = plantService.getMyPlant(plantNo);
+		if (plant == null || !userId.equals(plant.getUserId())) return "redirect:/";
 		model.addAttribute("plant", plant);
 		int interval = plantService.getWateringInterval(plant);
 		model.addAttribute("actualInterval", interval);
@@ -137,7 +139,10 @@ public class PlantController {
 	 */
 	@PostMapping("/update")
 	public String update(MyPlantDTO myPlant, HttpSession session) {
-		if (session.getAttribute("userId") == null) return "redirect:/login";
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) return "redirect:/login";
+		// 폼에서 온 userId는 무시하고 세션 값으로 덮어써서, 남의 식물을 수정하지 못하게 함
+		myPlant.setUserId(userId);
 		plantService.updatePlant(myPlant);
 		return "redirect:/";
 	}
@@ -147,8 +152,9 @@ public class PlantController {
 	 */
 	@PostMapping("/delete")
 	public String delete(@RequestParam("plantNo") int plantNo, HttpSession session) {
-		if (session.getAttribute("userId") == null) return "redirect:/login";
-		plantService.deletePlant(plantNo);
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) return "redirect:/login";
+		plantService.deletePlant(plantNo, userId);
 		return "redirect:/";
 	}
 

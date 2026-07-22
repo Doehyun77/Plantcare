@@ -146,7 +146,7 @@ public class PlantService {
 	/**
 	 * 식물 삭제
 	 */
-	public void deletePlant(int plantNo) {
-		myPlantMapper.delete(plantNo);
+	public void deletePlant(int plantNo, String userId) {
+		myPlantMapper.delete(plantNo, userId);
 	}
 }
