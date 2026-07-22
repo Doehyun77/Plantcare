@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpSession;
 import kr.ac.tukorea.plantcare.dto.MyPlantDTO;
 import kr.ac.tukorea.plantcare.dto.PlantInfoDTO;
 import kr.ac.tukorea.plantcare.repository.PlantInfoMapper;
@@ -41,7 +42,7 @@ public class PlantController {
 	}
 
 	/**
-	 * 자동완성 검색 (Ajax, JSON 응답)
+	 * 자동완성 검색 (Ajax, JSON 응답) — 인증 불필요
 	 */
 	@GetMapping("/search")
 	@ResponseBody
@@ -53,7 +54,8 @@ public class PlantController {
 	 * 등록 페이지
 	 */
 	@GetMapping("/register")
-	public String registerForm() {
+	public String registerForm(HttpSession session) {
+		if (session.getAttribute("userId") == null) return "redirect:/login";
 		return "plantRegister";
 	}
 
@@ -62,14 +64,16 @@ public class PlantController {
 	 */
 	@PostMapping("/register")
 	public String register(MyPlantDTO myPlant,
-			@RequestParam(value = "photo", required = false) MultipartFile photo) {
-		myPlant.setUserId("default");
-		// 빈 문자열을 null로 변환 (DB DATE 타입 호환)
+			@RequestParam(value = "photo", required = false) MultipartFile photo,
+			HttpSession session) {
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) return "redirect:/login";
+
+		myPlant.setUserId(userId);
 		if (myPlant.getLastWaterDate() != null && myPlant.getLastWaterDate().isEmpty()) {
 			myPlant.setLastWaterDate(null);
 		}
 
-		// 사진 업로드 처리
 		if (photo != null && !photo.isEmpty()) {
 			try {
 				String fileName = UUID.randomUUID().toString() + "_"
@@ -91,7 +95,10 @@ public class PlantController {
 	 * 상세 페이지
 	 */
 	@GetMapping("/detail")
-	public String detail(@RequestParam("plantNo") int plantNo, Model model) {
+	public String detail(@RequestParam("plantNo") int plantNo, Model model,
+			HttpSession session) {
+		if (session.getAttribute("userId") == null) return "redirect:/login";
+
 		MyPlantDTO plant = plantService.getMyPlant(plantNo);
 		model.addAttribute("plant", plant);
 		int interval = plantService.getWateringInterval(plant);
@@ -112,16 +119,10 @@ public class PlantController {
 		return "plantDetail";
 	}
 
-	/**
-	 * 계절별 물주기 코드 -> 일수 (코드 없으면 null, 화면에 표시 안 함)
-	 */
 	private Integer codeToDays(String code) {
 		return code != null ? calendarService.getIntervalFromCode(code) : null;
 	}
 
-	/**
-	 * gardenDtl API 응답엔 이미지 URL이 없으므로, 캐시된 검색 결과에서 이미지 복원
-	 */
 	private void restoreImageIfMissing(PlantInfoDTO info, String cntntsNo) {
 		if (info != null && info.getImageUrl() == null) {
 			PlantInfoDTO cached = plantInfoMapper.findByCntntsNo(cntntsNo);
@@ -135,7 +136,8 @@ public class PlantController {
 	 * 수정 처리
 	 */
 	@PostMapping("/update")
-	public String update(MyPlantDTO myPlant) {
+	public String update(MyPlantDTO myPlant, HttpSession session) {
+		if (session.getAttribute("userId") == null) return "redirect:/login";
 		plantService.updatePlant(myPlant);
 		return "redirect:/";
 	}
@@ -144,24 +146,29 @@ public class PlantController {
 	 * 삭제 처리
 	 */
 	@PostMapping("/delete")
-	public String delete(@RequestParam("plantNo") int plantNo) {
+	public String delete(@RequestParam("plantNo") int plantNo, HttpSession session) {
+		if (session.getAttribute("userId") == null) return "redirect:/login";
 		plantService.deletePlant(plantNo);
 		return "redirect:/";
 	}
 
 	/**
-	 * 도감: 식물 검색 페이지
+	 * 도감 페이지
 	 */
 	@GetMapping("/encyclopedia")
-	public String encyclopediaForm() {
+	public String encyclopediaForm(HttpSession session) {
+		if (session.getAttribute("userId") == null) return "redirect:/login";
 		return "plantEncyclopedia";
 	}
 
 	/**
-	 * 도감: 식물 상세 정보 (API에서 직접 조회)
+	 * 도감: 식물 상세
 	 */
 	@GetMapping("/encyclopedia/detail")
-	public String encyclopediaDetail(@RequestParam("cntntsNo") String cntntsNo, Model model) {
+	public String encyclopediaDetail(@RequestParam("cntntsNo") String cntntsNo,
+			Model model, HttpSession session) {
+		if (session.getAttribute("userId") == null) return "redirect:/login";
+
 		PlantInfoDTO info = apiService.getPlantDetail(cntntsNo);
 		restoreImageIfMissing(info, cntntsNo);
 		model.addAttribute("info", info);
@@ -176,11 +183,14 @@ public class PlantController {
 	}
 
 	/**
-	 * 도감: 식물 상세 정보 (Ajax, JSON 응답 - 검색 화면에서 바로 펼쳐 보여주기용)
+	 * 도감: 식물 상세 JSON
 	 */
 	@GetMapping("/encyclopedia/info")
 	@ResponseBody
-	public Map<String, Object> encyclopediaInfo(@RequestParam("cntntsNo") String cntntsNo) {
+	public Map<String, Object> encyclopediaInfo(@RequestParam("cntntsNo") String cntntsNo,
+			HttpSession session) {
+		if (session.getAttribute("userId") == null) return null;
+
 		PlantInfoDTO info = apiService.getPlantDetail(cntntsNo);
 		restoreImageIfMissing(info, cntntsNo);
 		Map<String, Object> result = new LinkedHashMap<>();

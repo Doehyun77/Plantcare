@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import jakarta.servlet.http.HttpSession;
 import kr.ac.tukorea.plantcare.dto.MyPlantDTO;
 import kr.ac.tukorea.plantcare.service.CalendarService;
 import kr.ac.tukorea.plantcare.service.PlantService;
@@ -23,8 +24,11 @@ public class HomeController {
 	}
 
 	@GetMapping("/")
-	public String home(Model model) {
-		List<MyPlantDTO> plants = plantService.getMyPlants("default");
+	public String home(HttpSession session, Model model) {
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) return "redirect:/login";
+
+		List<MyPlantDTO> plants = plantService.getMyPlants(userId);
 
 		List<PlantWithWater> result = plants.stream().map(p -> {
 			int interval = plantService.getWateringInterval(p);

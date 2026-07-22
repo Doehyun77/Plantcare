@@ -53,3 +53,11 @@ CREATE TABLE IF NOT EXISTS watering_log (
 	INDEX idx_watering_log_plant_date (plant_no, water_date DESC),
 	FOREIGN KEY (plant_no) REFERENCES my_plant(plant_no)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 4. user — 사용자 계정
+CREATE TABLE IF NOT EXISTS user (
+	user_id    VARCHAR(20)  PRIMARY KEY,
+	password   VARCHAR(255) NOT NULL,
+	nickname   VARCHAR(100) NOT NULL,
+	reg_date   DATETIME DEFAULT NOW()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
