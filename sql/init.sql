@@ -61,3 +61,14 @@ CREATE TABLE IF NOT EXISTS user (
 	nickname   VARCHAR(100) NOT NULL,
 	reg_date   DATETIME DEFAULT NOW()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 5. plant_diary — 식물 성장 일지
+CREATE TABLE IF NOT EXISTS plant_diary (
+	diary_no   INT AUTO_INCREMENT PRIMARY KEY,
+	plant_no   INT NOT NULL,
+	content    TEXT NOT NULL,
+	photo_path VARCHAR(500),
+	reg_date   DATETIME DEFAULT NOW(),
+	INDEX idx_plant_diary_plant_no (plant_no, reg_date DESC),
+	FOREIGN KEY (plant_no) REFERENCES my_plant(plant_no)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -17,8 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 import kr.ac.tukorea.plantcare.dto.MyPlantDTO;
+import kr.ac.tukorea.plantcare.dto.PlantDiaryDTO;
 import kr.ac.tukorea.plantcare.dto.PlantInfoDTO;
 import kr.ac.tukorea.plantcare.repository.PlantInfoMapper;
+import kr.ac.tukorea.plantcare.service.PlantDiaryService;
 import kr.ac.tukorea.plantcare.service.PlantService;
 import kr.ac.tukorea.plantcare.service.ApiService;
 import kr.ac.tukorea.plantcare.service.CalendarService;
@@ -31,14 +33,18 @@ public class PlantController {
 	private final ApiService apiService;
 	private final CalendarService calendarService;
 	private final PlantInfoMapper plantInfoMapper;
+	private final PlantDiaryService plantDiaryService;
 
 	private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/images/plants/";
+	private static final String DIARY_UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/images/diary/";
 
-	public PlantController(PlantService plantService, ApiService apiService, CalendarService calendarService, PlantInfoMapper plantInfoMapper) {
+	public PlantController(PlantService plantService, ApiService apiService, CalendarService calendarService,
+			PlantInfoMapper plantInfoMapper, PlantDiaryService plantDiaryService) {
 		this.plantService = plantService;
 		this.apiService = apiService;
 		this.calendarService = calendarService;
 		this.plantInfoMapper = plantInfoMapper;
+		this.plantDiaryService = plantDiaryService;
 	}
 
 	/**
@@ -111,6 +117,10 @@ public class PlantController {
 		model.addAttribute("needsWater",
 			calendarService.needsWaterToday(plant.getLastWaterDate(), interval));
 		model.addAttribute("season", calendarService.getCurrentSeasonCode());
+		int daysTogether = plantService.getDaysTogether(plant.getRegDate());
+		model.addAttribute("daysTogether", daysTogether);
+		model.addAttribute("growthTier", plantService.getGrowthTier(daysTogether));
+		model.addAttribute("diaries", plantDiaryService.getDiaries(plantNo));
 
 		if (info != null) {
 			model.addAttribute("springDays", codeToDays(info.getWaterSpring()));
@@ -156,6 +166,54 @@ public class PlantController {
 		if (userId == null) return "redirect:/login";
 		plantService.deletePlant(plantNo, userId);
 		return "redirect:/";
+	}
+
+	/**
+	 * 성장 일지 등록 (사진 업로드 포함)
+	 */
+	@PostMapping("/diary")
+	public String addDiary(@RequestParam("plantNo") int plantNo,
+			@RequestParam("content") String content,
+			@RequestParam(value = "photo", required = false) MultipartFile photo,
+			HttpSession session) {
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) return "redirect:/login";
+
+		MyPlantDTO plant = plantService.getMyPlant(plantNo);
+		if (plant == null || !userId.equals(plant.getUserId())) return "redirect:/";
+
+		PlantDiaryDTO diary = new PlantDiaryDTO();
+		diary.setPlantNo(plantNo);
+		diary.setContent(content);
+
+		if (photo != null && !photo.isEmpty()) {
+			try {
+				String fileName = UUID.randomUUID().toString() + "_"
+					+ photo.getOriginalFilename();
+				File dest = new File(DIARY_UPLOAD_DIR + fileName);
+				dest.getParentFile().mkdirs();
+				photo.transferTo(dest);
+				diary.setPhotoPath("/images/diary/" + fileName);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		plantDiaryService.addDiary(diary);
+		return "redirect:/plants/detail?plantNo=" + plantNo;
+	}
+
+	/**
+	 * 성장 일지 삭제
+	 */
+	@PostMapping("/diary/delete")
+	public String deleteDiary(@RequestParam("diaryNo") int diaryNo,
+			@RequestParam("plantNo") int plantNo,
+			HttpSession session) {
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) return "redirect:/login";
+		plantDiaryService.deleteDiary(diaryNo, userId);
+		return "redirect:/plants/detail?plantNo=" + plantNo;
 	}
 
 	/**
