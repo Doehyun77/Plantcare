@@ -28,11 +28,11 @@
 			photo_path = #{photoPath},
 			user_water_interval = #{userWaterInterval},
 			last_water_date = #{lastWaterDate}
-		WHERE plant_no = #{plantNo} AND del_yn = 'N'
+		WHERE plant_no = #{plantNo} AND user_id = #{userId} AND del_yn = 'N'
 	</update>
 
-	<update id="delete" parameterType="int">
-		UPDATE my_plant SET del_yn = 'Y' WHERE plant_no = #{plantNo}
+	<update id="delete">
+		UPDATE my_plant SET del_yn = 'Y' WHERE plant_no = #{plantNo} AND user_id = #{userId}
 	</update>
 
 </mapper>

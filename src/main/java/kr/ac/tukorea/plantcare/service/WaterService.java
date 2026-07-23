@@ -25,20 +25,21 @@ public class WaterService {
 	}
 
 	/**
-	 * 간편체크
+	 * 간편체크 (본인 소유 식물일 때만 처리)
 	 */
-	public void checkWater(int plantNo) {
+	public boolean checkWater(int plantNo, String userId) {
+		MyPlantDTO plant = myPlantMapper.findByPlantNo(plantNo);
+		if (plant == null || !userId.equals(plant.getUserId())) return false;
+
 		WateringLogDTO log = new WateringLogDTO();
 		log.setPlantNo(plantNo);
 		String today = LocalDate.now().toString();
 		log.setWaterDate(today);
 		wateringLogMapper.insert(log);
 
-		MyPlantDTO plant = myPlantMapper.findByPlantNo(plantNo);
-		if (plant != null) {
-			plant.setLastWaterDate(today);
-			myPlantMapper.update(plant);
-		}
+		plant.setLastWaterDate(today);
+		myPlantMapper.update(plant);
+		return true;
 	}
 
 	/**

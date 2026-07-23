@@ -6,7 +6,7 @@
 	<div class="reg-panel">
 		<h3>📖 식물 도감 검색</h3>
 		<div class="reg-search-wrap">
-			<input type="text" id="searchKeyword" class="reg-search-input" placeholder="식물명을 입력하세요 (예: 스투키)" autocomplete="off">
+			<input type="text" id="searchKeyword" class="reg-search-input" placeholder="식물명을 입력하세요" autocomplete="off">
 			<div id="searchResults" class="search-results"></div>
 		</div>
 	</div>
@@ -16,6 +16,9 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
+const EXAMPLE_PLANTS = ['몬스테라', '아이비', '산세베리아', '디펜바키아', '알로카시아', '칼라데아', '벤자민고무나무', '싱고니움'];
+$('#searchKeyword').attr('placeholder', '식물명을 입력하세요 (예: ' + EXAMPLE_PLANTS[Math.floor(Math.random() * EXAMPLE_PLANTS.length)] + ')');
+
 let debounceTimer;
 $('#searchKeyword').on('input', function() {
 	clearTimeout(debounceTimer);
