@@ -1,5 +1,7 @@
 package kr.ac.tukorea.plantcare.service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -148,5 +150,24 @@ public class PlantService {
 	 */
 	public void deletePlant(int plantNo, String userId) {
 		myPlantMapper.delete(plantNo, userId);
+	}
+
+	/**
+	 * 등록일(reg_date) 기준 "함께한 지 N일째" (등록 당일 = 1일째)
+	 */
+	public int getDaysTogether(String regDate) {
+		if (regDate == null) return 0;
+		LocalDate reg = LocalDate.parse(regDate.substring(0, 10));
+		return (int) ChronoUnit.DAYS.between(reg, LocalDate.now()) + 1;
+	}
+
+	/**
+	 * 함께한 일수에 따른 성장 단계: 100일 씨앗, 200일 모종, 300일 꽃
+	 */
+	public String getGrowthTier(int daysTogether) {
+		if (daysTogether >= 300) return "flower";
+		if (daysTogether >= 200) return "sprout";
+		if (daysTogether >= 100) return "seed";
+		return "none";
 	}
 }

@@ -102,7 +102,18 @@
 			<div class="home-row">
 				<div class="row-avatar"><c:choose><c:when test="${not empty plant.photoPath}"><img src="${plant.photoPath}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:when test="${not empty plant.imageUrl}"><img src="${plant.imageUrl}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></c:when><c:otherwise>${fn:substring(plant.nickname, 0, 1)}</c:otherwise></c:choose></div>
 				<div class="row-body">
-					<div class="row-name">${plant.nickname}</div>
+					<div class="row-name">${plant.nickname}
+						<span class="together-chip">D+${plant.daysTogether}</span>
+						<c:if test="${plant.growthTier == 'seed'}">
+							<span class="medal seed"><svg viewBox="0 0 24 24"><ellipse class="seed-shape" cx="12" cy="12" rx="5" ry="6.8" transform="rotate(-12 12 12)"/><path class="seam" d="M12 6c-1.3 2.2-1.3 9.6 0.5 11.8" transform="rotate(-12 12 12)"/><ellipse class="shine" cx="10" cy="8.2" rx="1.3" ry="2.1" transform="rotate(-12 12 12)"/></svg></span>
+						</c:if>
+						<c:if test="${plant.growthTier == 'sprout'}">
+							<span class="medal sprout"><svg viewBox="0 0 24 24"><line class="stem" x1="12" y1="17.3" x2="12" y2="10.5"/><ellipse class="leaf" cx="8.3" cy="9.3" rx="3.4" ry="2" transform="rotate(-30 8.3 9.3)"/><ellipse class="leaf" cx="15.7" cy="9.3" rx="3.4" ry="2" transform="rotate(30 15.7 9.3)"/><ellipse class="shine" cx="7.2" cy="8.3" rx="1" ry="1.6" transform="rotate(-30 8.3 9.3)"/></svg></span>
+						</c:if>
+						<c:if test="${plant.growthTier == 'flower'}">
+							<span class="medal flower"><svg viewBox="0 0 24 24"><ellipse class="petal" cx="12" cy="7.2" rx="2.1" ry="3.2" transform="rotate(0 12 12)"/><ellipse class="petal" cx="12" cy="7.2" rx="2.1" ry="3.2" transform="rotate(45 12 12)"/><ellipse class="petal" cx="12" cy="7.2" rx="2.1" ry="3.2" transform="rotate(90 12 12)"/><ellipse class="petal" cx="12" cy="7.2" rx="2.1" ry="3.2" transform="rotate(135 12 12)"/><ellipse class="petal" cx="12" cy="7.2" rx="2.1" ry="3.2" transform="rotate(180 12 12)"/><ellipse class="petal" cx="12" cy="7.2" rx="2.1" ry="3.2" transform="rotate(225 12 12)"/><ellipse class="petal" cx="12" cy="7.2" rx="2.1" ry="3.2" transform="rotate(270 12 12)"/><ellipse class="petal" cx="12" cy="7.2" rx="2.1" ry="3.2" transform="rotate(315 12 12)"/><circle class="center" cx="12" cy="12" r="2.1"/><ellipse class="shine" cx="10.7" cy="10.6" rx="0.9" ry="1.2" transform="rotate(-30 10.7 10.6)"/></svg></span>
+						</c:if>
+					</div>
 					<div class="row-sub">마지막 물: ${plant.lastWaterDate != null ? plant.lastWaterDate : '기록 없음'}</div>
 				</div>
 				<c:if test="${plant.needsWater}">
