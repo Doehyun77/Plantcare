@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.tukorea.plantcare.repository.PlantDiaryMapper">
+
+	<select id="findByPlantNo" parameterType="int" resultType="PlantDiaryDTO">
+		SELECT * FROM plant_diary WHERE plant_no = #{plantNo} ORDER BY reg_date DESC
+	</select>
+
+	<select id="findByDiaryNo" parameterType="int" resultType="PlantDiaryDTO">
+		SELECT * FROM plant_diary WHERE diary_no = #{diaryNo}
+	</select>
+
+	<insert id="insert" parameterType="PlantDiaryDTO" useGeneratedKeys="true" keyProperty="diaryNo">
+		INSERT INTO plant_diary (plant_no, content, photo_path)
+		VALUES (#{plantNo}, #{content}, #{photoPath})
+	</insert>
+
+	<delete id="delete" parameterType="int">
+		DELETE FROM plant_diary WHERE diary_no = #{diaryNo}
+	</delete>
+
+</mapper>

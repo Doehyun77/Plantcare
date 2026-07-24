@@ -39,7 +39,9 @@ public class HomeController {
 				var info = plantService.getPlantInfo(p.getCntntsNo());
 				if (info != null) imageUrl = info.getImageUrl();
 			}
-			return new PlantWithWater(p, needsWater, imageUrl);
+			int daysTogether = plantService.getDaysTogether(p.getRegDate());
+			String growthTier = plantService.getGrowthTier(daysTogether);
+			return new PlantWithWater(p, needsWater, imageUrl, daysTogether, growthTier);
 		}).collect(Collectors.toList());
 
 		model.addAttribute("plants", result);
@@ -50,11 +52,16 @@ public class HomeController {
 		private final MyPlantDTO plant;
 		private final boolean needsWater;
 		private final String imageUrl;
+		private final int daysTogether;
+		private final String growthTier;
 
-		public PlantWithWater(MyPlantDTO plant, boolean needsWater, String imageUrl) {
+		public PlantWithWater(MyPlantDTO plant, boolean needsWater, String imageUrl,
+				int daysTogether, String growthTier) {
 			this.plant = plant;
 			this.needsWater = needsWater;
 			this.imageUrl = imageUrl;
+			this.daysTogether = daysTogether;
+			this.growthTier = growthTier;
 		}
 
 		public int getPlantNo() { return plant.getPlantNo(); }
@@ -63,5 +70,7 @@ public class HomeController {
 		public String getPhotoPath() { return plant.getPhotoPath(); }
 		public String getImageUrl() { return imageUrl; }
 		public boolean isNeedsWater() { return needsWater; }
+		public int getDaysTogether() { return daysTogether; }
+		public String getGrowthTier() { return growthTier; }
 	}
 }
